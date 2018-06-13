@@ -1,25 +1,16 @@
 import type from 'prop-types'
 import React from 'react'
-import ReactDOM from 'react-dom'
 import Form from 'react-formal'
 import yup from 'yup'
-import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-import {
-  sortInteractionSteps,
-  getInteractionPath,
-  getChildren,
-  findParent,
-  makeTree
-} from '../lib'
+import { makeTree } from '../lib'
 import theme from '../styles/theme'
 import GSForm from './forms/GSForm'
 import CampaignFormSectionHeading from './CampaignFormSectionHeading'
