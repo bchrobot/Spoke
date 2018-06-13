@@ -185,7 +185,7 @@ export class AssignmentTexterContact extends React.Component {
 
     let disabled = false
     let disabledText = 'Sending...'
-    let snackbarOnTouchTap = null
+    let snackbarOnClick = null
     let snackbarActionTitle = null
     let snackbarError = null
 
@@ -193,7 +193,7 @@ export class AssignmentTexterContact extends React.Component {
       disabledText = ''
       disabled = true
       snackbarError = 'Your assignment has changed'
-      snackbarOnTouchTap = this.goBackToTodos
+      snackbarOnClick = this.goBackToTodos
       snackbarActionTitle = 'Back to Todos'
     } else if (contact.optOut) {
       disabledText = 'Skipping opt-out...'
@@ -211,7 +211,7 @@ export class AssignmentTexterContact extends React.Component {
       questionResponses,
       snackbarError,
       snackbarActionTitle,
-      snackbarOnTouchTap,
+      snackbarOnClick,
       optOutMessageText: "I'm opting you out of texts immediately. Have a great day.",
       responsePopoverOpen: false,
       messageText: this.getStartingMessageText(),
@@ -351,7 +351,7 @@ export class AssignmentTexterContact extends React.Component {
 
       if (e.message === 'Your assignment has changed') {
         newState.snackbarActionTitle = 'Back to todos'
-        newState.snackbarOnTouchTap = this.goBackToTodos
+        newState.snackbarOnClick = this.goBackToTodos
         this.setState(newState)
       } else {
         // opt out or send message Error
@@ -580,12 +580,12 @@ export class AssignmentTexterContact extends React.Component {
     let button = null
     if (messageStatus === 'closed') {
       button = (<RaisedButton
-        onTouchTap={() => this.handleEditMessageStatus('needsResponse')}
+        onClick={() => this.handleEditMessageStatus('needsResponse')}
         label='Reopen'
       />)
     } else if (messageStatus === 'needsResponse' || messageStatus === 'messaged' || messageStatus === 'convo') {
       button = (<RaisedButton
-        onTouchTap={this.handleClickCloseContactButton}
+        onClick={this.handleClickCloseContactButton}
         label='Skip Reply'
       />)
     }
@@ -642,13 +642,13 @@ export class AssignmentTexterContact extends React.Component {
               <RaisedButton
                 secondary
                 label='Opt out'
-                onTouchTap={this.handleOpenDialog}
+                onClick={this.handleOpenDialog}
                 tooltip='Opt out this contact'
               />
               <RaisedButton
                 style={inlineStyles.mobileCannedReplies}
                 label='Canned replies'
-                onTouchTap={this.handleOpenPopover}
+                onClick={this.handleOpenPopover}
               />
               {this.renderNeedsResponseToggleButton(contact)}
               <div
@@ -675,12 +675,12 @@ export class AssignmentTexterContact extends React.Component {
               {this.renderNeedsResponseToggleButton(contact)}
               <RaisedButton
                 label='Canned responses'
-                onTouchTap={this.handleOpenPopover}
+                onClick={this.handleOpenPopover}
               />
               <RaisedButton
                 secondary
                 label='Opt out'
-                onTouchTap={this.handleOpenDialog}
+                onClick={this.handleOpenDialog}
                 tooltip='Opt out this contact'
                 tooltipPosition='top-center'
               />
@@ -705,7 +705,7 @@ export class AssignmentTexterContact extends React.Component {
         onOptOut={this.handleNavigateNext}
         rightToolbarIcon={(
           <IconButton
-            onTouchTap={this.props.onExitTexter}
+            onClick={this.props.onExitTexter}
             style={inlineStyles.exitTexterIconButton}
             tooltip='Return Home'
             tooltipPosition='bottom-center'
@@ -763,7 +763,7 @@ export class AssignmentTexterContact extends React.Component {
               <FlatButton
                 style={inlineStyles.dialogButton}
                 label='Cancel'
-                onTouchTap={this.handleCloseDialog}
+                onClick={this.handleCloseDialog}
               />
               <Form.Button
                 type='submit'
@@ -860,7 +860,7 @@ export class AssignmentTexterContact extends React.Component {
           open={!!this.state.snackbarError}
           message={this.state.snackbarError || ''}
           action={this.state.snackbarActionTitle}
-          onActionTouchTap={this.state.snackbarOnTouchTap}
+          onActionClick={this.state.snackbarOnClick}
         />
       </div>
     )

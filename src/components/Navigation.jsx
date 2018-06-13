@@ -21,7 +21,7 @@ const Navigation = function Navigation(props) {
           <ListItem
             key={section.name}
             primaryText={section.name}
-            onTouchTap={() => props.router.push(section.url)}
+            onClick={() => props.router.push(section.url)}
           />
         ))}
         <Divider />

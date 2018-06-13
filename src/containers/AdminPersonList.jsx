@@ -104,7 +104,7 @@ class AdminPersonList extends React.Component {
                     />
                   ))}
                 </DropDownMenu>
-                <FlatButton label='Edit' onTouchTap={() => { this.editUser(person.id) }} />
+                <FlatButton label='Edit' onClick={() => { this.editUser(person.id) }} />
               </TableRowColumn>
             </TableRow>
           ))}
@@ -121,7 +121,7 @@ class AdminPersonList extends React.Component {
         {this.renderTexters()}
         <FloatingActionButton
           style={theme.components.floatingButton}
-          onTouchTap={this.handleOpen}
+          onClick={this.handleOpen}
         >
           <ContentAdd />
         </FloatingActionButton>
@@ -143,7 +143,7 @@ class AdminPersonList extends React.Component {
             <FlatButton
               label='OK'
               primary
-              onTouchTap={this.handleClose}
+              onClick={this.handleClose}
             />
           ]}
           modal={false}
