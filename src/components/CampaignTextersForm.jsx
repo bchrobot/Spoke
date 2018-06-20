@@ -5,13 +5,13 @@ import yup from 'yup'
 import { StyleSheet, css } from 'aphrodite'
 // TODO: material-ui
 import AutoComplete from 'material-ui/AutoComplete'
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import theme from '../styles/theme'
 import GSForm from '../components/forms/GSForm'
@@ -112,9 +112,9 @@ export default class CampaignTextersForm extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.handleToggleChange = this.handleToggleChange.bind(this);
+    this.handleToggleChange = this.handleToggleChange.bind(this)
   }
 
   handleToggleChange() {
@@ -454,7 +454,7 @@ export default class CampaignTextersForm extends React.Component {
                 onChange={this.handleToggleChange}
               />
             }
-            label="Dynamically assign contacts"
+            label='Dynamically assign contacts'
           />
         </FormGroup>
         <GSForm
@@ -467,7 +467,7 @@ export default class CampaignTextersForm extends React.Component {
           {this.showSearch()}
             <div>
               <Button
-                variant="contained"
+                variant='contained'
                 label='Add All'
                 onClick={(() => this.addAllTexters())}
               />

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const styles = {
   button: {
@@ -28,7 +28,7 @@ const GSSubmitButton = (props) => {
   return (
     <div style={styles.button} {...props}>
       <Button
-        variant="contained"
+        variant='contained'
         primary
         type='submit'
         value='submit'

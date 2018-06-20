@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { withRouter } from 'react-router';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { withRouter } from 'react-router'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 
-import Navigation from '../components/Navigation';
+import Navigation from '../components/Navigation'
 
 class AdminNavigation extends React.Component {
   urlFromPath(path) {
@@ -22,11 +22,11 @@ class AdminNavigation extends React.Component {
         }))}
         switchListItem={
           <ListItem onClick={() => this.props.router.push(`/app/${organizationId}/todos`)}>
-            <ListItemText primary="Switch to texter" />
+            <ListItemText primary='Switch to texter' />
           </ListItem>
         }
       />
-    );
+    )
   }
 }
 

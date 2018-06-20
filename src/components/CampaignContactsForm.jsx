@@ -3,14 +3,14 @@ import React from 'react'
 import Form from 'react-formal'
 import yup from 'yup'
 import { StyleSheet, css } from 'aphrodite'
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItem from '@material-ui/core/ListItem';
-import CheckIcon from '@material-ui/icons/Check';
-import WarningIcon from '@material-ui/icons/Warning';
-import ErrorIcon from '@material-ui/icons/Error';
+import Button from '@material-ui/core/Button'
+import Divider from '@material-ui/core/Divider'
+import List from '@material-ui/core/List'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import ListItem from '@material-ui/core/ListItem'
+import CheckIcon from '@material-ui/icons/Check'
+import WarningIcon from '@material-ui/icons/Warning'
+import ErrorIcon from '@material-ui/icons/Error'
 
 import { parseCSV } from '../lib'
 import theme from '../styles/theme'
@@ -180,7 +180,7 @@ export default class CampaignContactsForm extends React.Component {
     return (
       <div>
         <Button
-          variant="contained"
+          variant='contained'
           style={innerStyles.button}
           label={uploading ? 'Uploading...' : 'Upload contacts'}
           labelPosition='before'

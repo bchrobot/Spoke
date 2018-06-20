@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { StyleSheet, css } from 'aphrodite';
-import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { StyleSheet, css } from 'aphrodite'
+import Button from '@material-ui/core/Button'
 
 // This is because the Toolbar from material-ui seems to only apply the correct margins if the
 // immediate child is a Button or other type it recognizes. Can get rid of this if we remove material-ui
@@ -36,7 +36,7 @@ class SendButton extends Component {
     return (
       <div className={css(styles.container)}>
         <Button
-          variant="contained"
+          variant='contained'
           onClick={this.handleTouchTap}
           disabled={this.props.disabled}
           label={this.clickStepLabels()[this.state.clickStepIndex]}

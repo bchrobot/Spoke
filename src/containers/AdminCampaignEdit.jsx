@@ -1,23 +1,23 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import gql from 'graphql-tag';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import WarningIcon from '@material-ui/icons/Warning';
-import DoneIcon from '@material-ui/icons/Done';
+import PropTypes from 'prop-types'
+import React from 'react'
+import gql from 'graphql-tag'
+import Button from '@material-ui/core/Button'
+import Avatar from '@material-ui/core/Avatar'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import WarningIcon from '@material-ui/icons/Warning'
+import DoneIcon from '@material-ui/icons/Done'
 
-import loadData from './hoc/load-data';
-import wrapMutations from './hoc/wrap-mutations';
-import theme from '../styles/theme';
-import CampaignBasicsForm from '../components/CampaignBasicsForm';
-import CampaignContactsForm from '../components/CampaignContactsForm';
-import CampaignTextersForm from '../components/CampaignTextersForm';
-import CampaignInteractionStepsForm from '../components/CampaignInteractionStepsForm';
-import CampaignCannedResponsesForm from '../components/CampaignCannedResponsesForm';
+import loadData from './hoc/load-data'
+import wrapMutations from './hoc/wrap-mutations'
+import theme from '../styles/theme'
+import CampaignBasicsForm from '../components/CampaignBasicsForm'
+import CampaignContactsForm from '../components/CampaignContactsForm'
+import CampaignTextersForm from '../components/CampaignTextersForm'
+import CampaignInteractionStepsForm from '../components/CampaignInteractionStepsForm'
+import CampaignCannedResponsesForm from '../components/CampaignCannedResponsesForm'
 
 const campaignInfoFragment = `
   id
@@ -452,20 +452,20 @@ class AdminCampaignEdit extends React.Component {
         <div>
           {this.props.campaignData.campaign.isArchived ? (
             <Button
-              variant="contained"
+              variant='contained'
               label='Unarchive'
               onClick={async() => await this.props.mutations.unarchiveCampaign(this.props.campaignData.campaign.id)}
             />
           ) : (
             <Button
-              variant="contained"
+              variant='contained'
               label='Archive'
               onClick={async() => await this.props.mutations.archiveCampaign(this.props.campaignData.campaign.id)}
             />
           )}
           <Button
-            variant="contained"
-            primary={true}
+            variant='contained'
+            primary
             label='Start This Campaign!'
             disabled={!isCompleted}
             onClick={async () => {
@@ -536,7 +536,7 @@ class AdminCampaignEdit extends React.Component {
               >
                 <DoneIcon style={{ fill: theme.colors.darkGreen }} />
               </Avatar>
-            );
+            )
             cardHeaderStyle.backgroundColor = theme.colors.green
           } else if (!sectionIsDone) {
             avatar = (
@@ -546,7 +546,7 @@ class AdminCampaignEdit extends React.Component {
               >
                 <WarningIcon style={{ fill: theme.colors.orange }} />
               </Avatar>
-            );
+            )
             cardHeaderStyle.backgroundColor = theme.colors.yellow
           }
 

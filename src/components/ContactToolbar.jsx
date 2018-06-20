@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import grey from '@material-ui/core/colors/grey';
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import grey from '@material-ui/core/colors/grey'
 
 import { getDisplayPhoneNumber } from '../lib/phone-format'
 import { getLocalTime } from '../lib/timezones'
 
 const inlineStyles = {
   toolbar: {
-    backgroundColor: grey[100],
+    backgroundColor: grey[100]
   },
   cellToolbarTitle: {
     fontSize: '1em'
@@ -54,15 +54,15 @@ const ContactToolbar = function ContactToolbar(props) {
     <div>
       <Toolbar style={inlineStyles.toolbar}>
         <div>
-          <Typography variant="title">{campaignContact.firstName}</Typography>
-          <Typography variant="title" style={inlineStyles.cellToolbarTitle} />
+          <Typography variant='title'>{campaignContact.firstName}</Typography>
+          <Typography variant='title' style={inlineStyles.cellToolbarTitle} />
           {location &&
-            <Typography variant="title" style={inlineStyles.timeToolbarTitle}>
+            <Typography variant='title' style={inlineStyles.timeToolbarTitle}>
               {formattedLocalTime}
             </Typography>
           }
           {location &&
-            <Typography variant="title"  style={inlineStyles.locationToolbarTitle}>
+            <Typography variant='title' style={inlineStyles.locationToolbarTitle}>
               {formattedLocation}
             </Typography>
           }

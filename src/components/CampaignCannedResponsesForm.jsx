@@ -3,13 +3,13 @@ import React from 'react'
 import Form from 'react-formal'
 import yup from 'yup'
 import { StyleSheet, css } from 'aphrodite'
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
+import Button from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
+import CreateIcon from '@material-ui/icons/Create'
 
 import theme from '../styles/theme'
 import GSForm from './forms/GSForm'

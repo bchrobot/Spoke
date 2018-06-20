@@ -2,13 +2,13 @@ import type from 'prop-types'
 import React from 'react'
 import Form from 'react-formal'
 import yup from 'yup'
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import DeleteIcon from '@material-ui/icons/Delete';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import DeleteIcon from '@material-ui/icons/Delete'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 
 import { makeTree } from '../lib'
 import theme from '../styles/theme'
@@ -173,7 +173,7 @@ export default class CampaignInteractionStepsForm extends React.Component {
       <div style={styles.answerContainer}>
         {interactionStep.questionText && interactionStep.script && (!interactionStep.parentInteractionId || interactionStep.answerOption) ? <div>
           <Button
-            variant="contained"
+            variant='contained'
             label='+ Add a response'
             onClick={this.addStep(interactionStep.id).bind(this)}
             style={{ marginBottom: '10px' }}
@@ -202,7 +202,7 @@ export default class CampaignInteractionStepsForm extends React.Component {
         />
         {this.renderInteractionStep(tree)}
         <Button
-          variant="raised"
+          variant='raised'
           primary
           label={this.props.saveLabel}
           onClick={this.onSave.bind(this)}

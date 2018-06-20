@@ -1,38 +1,38 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { withRouter } from 'react-router';
-import Form from 'react-formal';
-import gql from 'graphql-tag';
-import yup from 'yup';
-import { StyleSheet, css } from 'aphrodite';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { withRouter } from 'react-router'
+import Form from 'react-formal'
+import gql from 'graphql-tag'
+import yup from 'yup'
+import { StyleSheet, css } from 'aphrodite'
 
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import Divider from '@material-ui/core/Divider';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
-import grey from '@material-ui/core/colors/grey';
-import HomeIcon from '@material-ui/icons/Home';
-import CreateIcon from '@material-ui/icons/Create';
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Toolbar from '@material-ui/core/Toolbar'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardActions from '@material-ui/core/CardActions'
+import Divider from '@material-ui/core/Divider'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Snackbar from '@material-ui/core/Snackbar'
+import grey from '@material-ui/core/colors/grey'
+import HomeIcon from '@material-ui/icons/Home'
+import CreateIcon from '@material-ui/icons/Create'
 
 import { getChildren, getTopMostParent, interactionStepForId, log, isBetweenTextingHours } from '../lib'
-import { applyScript } from '../lib/scripts';
-import loadData from './hoc/load-data';
-import wrapMutations from './hoc/wrap-mutations';
-import Empty from '../components/Empty';
-import ContactToolbar from '../components/ContactToolbar';
-import MessageList from '../components/MessageList';
-import CannedResponseMenu from '../components/CannedResponseMenu';
-import AssignmentTexterSurveys from '../components/AssignmentTexterSurveys';
-import GSSubmitButton from '../components/forms/GSSubmitButton';
-import SendButton from '../components/SendButton';
-import BulkSendButton from '../components/BulkSendButton';
-import SendButtonArrow from '../components/SendButtonArrow';
-import GSForm from '../components/forms/GSForm';
+import { applyScript } from '../lib/scripts'
+import loadData from './hoc/load-data'
+import wrapMutations from './hoc/wrap-mutations'
+import Empty from '../components/Empty'
+import ContactToolbar from '../components/ContactToolbar'
+import MessageList from '../components/MessageList'
+import CannedResponseMenu from '../components/CannedResponseMenu'
+import AssignmentTexterSurveys from '../components/AssignmentTexterSurveys'
+import GSSubmitButton from '../components/forms/GSSubmitButton'
+import SendButton from '../components/SendButton'
+import BulkSendButton from '../components/BulkSendButton'
+import SendButtonArrow from '../components/SendButtonArrow'
+import GSForm from '../components/forms/GSForm'
 
 const styles = StyleSheet.create({
   mobile: {
@@ -661,7 +661,7 @@ export class AssignmentTexterContact extends React.Component {
       return (
         <div>
           <Toolbar style={inlineStyles.actionToolbarFirst}>
-            <div firstChild={true}>
+            <div firstChild>
               <SendButton
                 threeClickEnabled={campaign.organization.threeClickEnabled}
                 onFinalTouchTap={this.handleClickSendMessageButton}

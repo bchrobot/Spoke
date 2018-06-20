@@ -1,21 +1,21 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { withRouter } from 'react-router';
-import gql from 'graphql-tag';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { withRouter } from 'react-router'
+import gql from 'graphql-tag'
+import Button from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import AddIcon from '@material-ui/icons/Add'
 
-import { hasRole } from '../lib';
-import loadData from './hoc/load-data';
-import wrapMutations from './hoc/wrap-mutations';
-import theme from '../styles/theme';
-import LoadingIndicator from '../components/LoadingIndicator';
-import CampaignList from './CampaignList';
+import { hasRole } from '../lib'
+import loadData from './hoc/load-data'
+import wrapMutations from './hoc/wrap-mutations'
+import theme from '../styles/theme'
+import LoadingIndicator from '../components/LoadingIndicator'
+import CampaignList from './CampaignList'
 
 class AdminCampaignList extends React.Component {
   state = {
@@ -50,46 +50,46 @@ class AdminCampaignList extends React.Component {
   }
 
   handleClickFilter(event) {
-    const { campaignsFilter } = this.state;
-    campaignsFilter.anchorEl = event.currentTarget;
-    this.setState({ campaignsFilter });
-  };
+    const { campaignsFilter } = this.state
+    campaignsFilter.anchorEl = event.currentTarget
+    this.setState({ campaignsFilter })
+  }
 
   handleFilterChange(isArchived) {
     const campaignsFilter = {
       isArchived,
-      anchorEl: null,
-    };
-    this.setState({ campaignsFilter });
-  };
+      anchorEl: null
+    }
+    this.setState({ campaignsFilter })
+  }
 
   handleCloseFilter() {
-    const { campaignsFilter } = this.state;
-    campaignsFilter.anchorEl = null;
-    this.setState({ campaignsFilter });
-  };
+    const { campaignsFilter } = this.state
+    campaignsFilter.anchorEl = null
+    this.setState({ campaignsFilter })
+  }
 
   renderFilters() {
-    const { campaignsFilter } = this.state;
-    const { anchorEl, isArchived } = campaignsFilter;
+    const { campaignsFilter } = this.state
+    const { anchorEl, isArchived } = campaignsFilter
     return (
       <div>
-        <List component="nav">
+        <List component='nav'>
           <ListItem
-            button={true}
-            aria-haspopup="true"
-            aria-controls="campaign-state-menu"
-            aria-label="Campaign state"
+            button
+            aria-haspopup='true'
+            aria-controls='campaign-state-menu'
+            aria-label='Campaign state'
             onClick={this.handleClickFilter}
           >
             <ListItemText
-              primary="Campaign state"
+              primary='Campaign state'
               secondary={isArchived ? 'Archived' : 'Current'}
             />
           </ListItem>
         </List>
         <Menu
-          id="campaign-state-menu"
+          id='campaign-state-menu'
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={this.handleCloseFilter}
@@ -108,7 +108,7 @@ class AdminCampaignList extends React.Component {
           </MenuItem>
         </Menu>
       </div>
-    );
+    )
   }
 
   render() {
@@ -126,7 +126,7 @@ class AdminCampaignList extends React.Component {
 
         {adminPerms ?
          (<Button
-          variant="fab"
+           variant='fab'
            style={theme.components.floatingButton}
            onClick={this.handleClickNewButton}
          >

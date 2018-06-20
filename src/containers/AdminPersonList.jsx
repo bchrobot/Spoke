@@ -1,76 +1,76 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import gql from 'graphql-tag';
+import PropTypes from 'prop-types'
+import React from 'react'
+import gql from 'graphql-tag'
 
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import AddIcon from '@material-ui/icons/Add';
-import PeopleIcon from '@material-ui/icons/People';
+import Button from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogActions from '@material-ui/core/DialogActions'
+import AddIcon from '@material-ui/icons/Add'
+import PeopleIcon from '@material-ui/icons/People'
 
-import { getHighestRole, ROLE_HIERARCHY } from '../lib';
-import loadData from './hoc/load-data';
-import theme from '../styles/theme';
-import Empty from '../components/Empty';
-import OrganizationJoinLink from '../components/OrganizationJoinLink';
-import UserEdit from './UserEdit';
+import { getHighestRole, ROLE_HIERARCHY } from '../lib'
+import loadData from './hoc/load-data'
+import theme from '../styles/theme'
+import Empty from '../components/Empty'
+import OrganizationJoinLink from '../components/OrganizationJoinLink'
+import UserEdit from './UserEdit'
 
 
 class SelectRoleDropdown extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       anchorEl: null,
-      personRole: getHighestRole(props.person.roles),
-    };
+      personRole: getHighestRole(props.person.roles)
+    }
 
-    this.handleClickRoles = this.handleClickRoles.bind(this);
-    this.handleRoleChange = this.handleRoleChange.bind(this);
-    this.handleCloseRoles = this.handleCloseRoles.bind(this);
+    this.handleClickRoles = this.handleClickRoles.bind(this)
+    this.handleRoleChange = this.handleRoleChange.bind(this)
+    this.handleCloseRoles = this.handleCloseRoles.bind(this)
   }
 
   handleClickRoles(event) {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.setState({ anchorEl: event.currentTarget })
+  }
 
   handleRoleChange(newRole) {
-    this.props.handleChange(newRole);
+    this.props.handleChange(newRole)
     this.setState({
       anchorEl: null,
-      personRole: newRole,
-    });
-  };
+      personRole: newRole
+    })
+  }
 
   handleCloseRoles() {
-    this.setState({ anchorEl: null });
-  };
+    this.setState({ anchorEl: null })
+  }
 
   render() {
-    const { anchorEl, personRole } = this.state;
-    const { person, currentUser } = this.props;
+    const { anchorEl, personRole } = this.state
+    const { person, currentUser } = this.props
     const isCurrentUser = person.id === currentUser.id,
-          isOwner = personRole === 'OWNER' && getHighestRole(currentUser.roles) !== 'OWNER';
-    const isDisabled = isCurrentUser || isOwner;
+      isOwner = personRole === 'OWNER' && getHighestRole(currentUser.roles) !== 'OWNER'
+    const isDisabled = isCurrentUser || isOwner
     return (
       <div>
-        <List component="nav">
+        <List component='nav'>
           <ListItem
             button={!isDisabled}
-            aria-haspopup="true"
+            aria-haspopup='true'
             aria-controls={`${person.id}-roles-menu`}
-            aria-label="Contact Roles"
+            aria-label='Contact Roles'
             onClick={isDisabled ? null : this.handleClickRoles}
           >
             <ListItemText
@@ -96,14 +96,14 @@ class SelectRoleDropdown extends React.Component {
           ))}
         </Menu>
       </div>
-    );
+    )
   }
 }
 
 SelectRoleDropdown.propTypes = {
   currentUser: PropTypes.object,
   person: PropTypes.object,
-  handleChange: PropTypes.func,
+  handleChange: PropTypes.func
 }
 
 
@@ -172,7 +172,7 @@ class AdminPersonList extends React.Component {
       <Table selectable={false}>
         <TableBody
           displayRowCheckbox={false}
-          showRowHover={true}
+          showRowHover
         >
           {people.map((person) => (
             <TableRow
@@ -202,7 +202,7 @@ class AdminPersonList extends React.Component {
       <div>
         {this.renderTexters()}
         <Button
-          variant="fab"
+          variant='fab'
           style={theme.components.floatingButton}
           onClick={this.handleOpen}
         >

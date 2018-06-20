@@ -3,7 +3,7 @@ import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
 import yup from 'yup'
 import Form from 'react-formal'
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
 
 import GSForm from './forms/GSForm'
 
