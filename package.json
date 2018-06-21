@@ -69,7 +69,7 @@
     "aphrodite": "^0.4.1",
     "apollo-client": "^0.4.7",
     "apollo-server-express": "^1.2.0",
-    "aws-sdk": "^2.6.3",
+    "aws-sdk": "^2.260.1",
     "aws-serverless-express": "https://registry.npmjs.org/aws-serverless-express/-/aws-serverless-express-3.0.2.tgz",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
