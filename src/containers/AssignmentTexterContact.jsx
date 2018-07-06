@@ -18,6 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import grey from '@material-ui/core/colors/grey'
 import HomeIcon from '@material-ui/icons/Home'
 import CreateIcon from '@material-ui/icons/Create'
+import CloseIcon from '@material-ui/icons/Close'
 
 import { getChildren, getTopMostParent, interactionStepForId, log, isBetweenTextingHours } from '../lib'
 import { applyScript } from '../lib/scripts'
@@ -850,13 +851,29 @@ export class AssignmentTexterContact extends React.Component {
             {this.renderBottomFixedSection()}
           </div>
         </div>
-        {/* TODO: material-ui */}
         <Snackbar
           style={inlineStyles.snackbar}
           open={!!this.state.snackbarError}
           message={this.state.snackbarError || ''}
-          action={this.state.snackbarActionTitle}
-          onActionClick={this.state.snackbarOnClick}
+          action={[
+            <Button
+              key="snackbar-action"
+              color="secondary"
+              size="small"
+              onClick={this.state.snackbarOnClick}
+            >
+              {this.state.snackbarActionTitle}
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={this.handleClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
         />
       </div>
     )
