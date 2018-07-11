@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import type from 'prop-types'
 import gql from 'graphql-tag'
+import { compose } from 'react-apollo'
 import DataTables from 'material-ui-datatables'
 
 import Dialog from '@material-ui/core/Dialog'
 import Button from '@material-ui/core/Button'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
-import loadData from '../containers/hoc/load-data'
+import { newLoadData } from '../containers/hoc/load-data'
 import LoadingIndicator from '../components/LoadingIndicator'
 import { MESSAGE_STATUSES } from '../components/IncomingMessageFilter'
 
@@ -225,9 +226,9 @@ IncomingMessageList.propTypes = {
   utc: type.string
 }
 
-const mapQueriesToProps = ({ ownProps }) => ({
+const queries = {
   conversations: {
-    query: gql`
+    gql: gql`
       query Q(
         $organizationId: String!
         $cursor: OffsetLimitCursor!
@@ -276,16 +277,21 @@ const mapQueriesToProps = ({ ownProps }) => ({
         }
       }
     `,
-    variables: {
-      organizationId: ownProps.organizationId,
-      cursor: ownProps.cursor,
-      contactsFilter: ownProps.contactsFilter,
-      campaignsFilter: ownProps.campaignsFilter,
-      assignmentsFilter: ownProps.assignmentsFilter,
-      utc: ownProps.utc
-    },
-    forceFetch: true
+    options: (props) => ({
+      variables: {
+        organizationId: props.organizationId,
+        cursor: props.cursor,
+        contactsFilter: props.contactsFilter,
+        campaignsFilter: props.campaignsFilter,
+        assignmentsFilter: props.assignmentsFilter,
+        utc: props.utc
+      },
+      fetchPolicy: 'network-only'
+    })
   }
-})
+}
 
-export default loadData(withRouter(IncomingMessageList), { mapQueriesToProps })
+export default compose(
+  newLoadData({ queries }),
+  withRouter
+)(IncomingMessageList)

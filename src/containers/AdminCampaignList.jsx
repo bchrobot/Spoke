@@ -116,12 +116,13 @@ class AdminCampaignList extends React.Component {
 
   render() {
     const { adminPerms } = this.props.match.params
+    const { isArchived } = this.state.campaignsFilter
     return (
       <div>
         {this.renderFilters()}
         {this.state.isCreating ? <LoadingIndicator /> : (
           <CampaignList
-            campaignsFilter={this.state.campaignsFilter}
+            campaignsFilter={{ isArchived }}
             organizationId={this.props.match.params.organizationId}
             adminPerms={adminPerms}
           />

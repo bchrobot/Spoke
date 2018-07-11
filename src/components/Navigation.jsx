@@ -5,6 +5,7 @@ import { withRouter } from 'react-router'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 
 const Navigation = function Navigation(props) {
@@ -12,8 +13,8 @@ const Navigation = function Navigation(props) {
 
   return (
     <Paper
-      rounded={false}
-      zDepth={2}
+      square={true}
+      elevation={2}
       style={{
         height: '100%'
       }}
@@ -22,9 +23,10 @@ const Navigation = function Navigation(props) {
         {sections.map((section) => (
           <ListItem
             key={section.name}
-            primaryText={section.name}
             onClick={() => props.history.push(section.url)}
-          />
+          >
+            <ListItemText primary={section.name} />
+          </ListItem>
         ))}
         <Divider />
         {switchListItem}

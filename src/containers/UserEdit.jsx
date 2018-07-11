@@ -1,13 +1,18 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import loadData from './hoc/load-data'
-import wrapMutations from './hoc/wrap-mutations'
+import { newLoadData } from './hoc/load-data'
 import gql from 'graphql-tag'
 
 import GSForm from '../components/forms/GSForm'
 import GSSubmitButton from '../components/forms/GSSubmitButton'
 import Form from 'react-formal'
 import yup from 'yup'
+
+const editUserVars = (props, userData) => ({
+  userId: props.userId,
+  organizationId: props.organizationId,
+  userData
+})
 
 class UserEdit extends React.Component {
 
@@ -22,11 +27,11 @@ class UserEdit extends React.Component {
   };
 
   async componentWillMount() {
-    const user = await this.props.mutations.editUser(null)
+    const user = await this.props.mutations.editUser(editUserVars(this.props, null))
   }
 
   async handleSave(formData) {
-    const result = await this.props.mutations.editUser(formData)
+    const result = await this.props.mutations.editUser(editUserVars(this.props, formData))
     if (this.props.onRequestClose) {
       this.props.onRequestClose()
     }
@@ -68,24 +73,20 @@ UserEdit.propTypes = {
   saveLabel: PropTypes.string
 }
 
-const mapMutationsToProps = ({ ownProps }) => ({
-  editUser: (userData) => ({
-    mutation: gql`
-        mutation editUser($organizationId: String!, $userId: Int!, $userData: UserInput) {
-          editUser(organizationId: $organizationId, userId: $userId, userData: $userData) {
-            id,
-            firstName,
-            lastName,
-            cell,
-            email
-          }
-        }`,
-    variables: {
-      userId: ownProps.userId,
-      organizationId: ownProps.organizationId,
-      userData
-    }
-  })
-})
+const mutations = {
+  editUser: {
+    gql: gql`
+      mutation editUser($organizationId: String!, $userId: Int!, $userData: UserInput) {
+        editUser(organizationId: $organizationId, userId: $userId, userData: $userData) {
+          id,
+          firstName,
+          lastName,
+          cell,
+          email
+        }
+      }
+    `
+  }
+}
 
-export default loadData(wrapMutations(UserEdit), { mapMutationsToProps })
+export default newLoadData({ mutations })(UserEdit)

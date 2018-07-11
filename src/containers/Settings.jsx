@@ -18,7 +18,7 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 
-import loadData from './hoc/load-data'
+import { newLoadData } from './hoc/load-data'
 import wrapMutations from './hoc/wrap-mutations'
 import GSForm from '../components/forms/GSForm'
 import GSSubmitButton from '../components/forms/GSSubmitButton'
@@ -56,7 +56,11 @@ class Settings extends React.Component {
   }
 
   handleSubmitTextingHoursForm = async ({ textingHoursStart, textingHoursEnd }) => {
-    await this.props.mutations.updateTextingHours(textingHoursStart, textingHoursEnd)
+    await this.props.mutations.updateTextingHours({
+      organizationId: this.props.match.params.organizationId,
+      textingHoursStart,
+      textingHoursEnd
+    })
     this.handleCloseTextingHoursDialog()
   }
 
@@ -142,7 +146,10 @@ class Settings extends React.Component {
                     <Switch
                       checked={organization.textingHoursEnforced}
                       onChange={async (event, isToggled) => {
-                        await this.props.mutations.updateTextingHoursEnforcement(isToggled)
+                        await this.props.mutations.updateTextingHoursEnforcement({
+                          organizationId: this.props.match.params.organizationId,
+                          textingHoursEnforced: isToggled
+                        })
                       }}
                     />
                   }
@@ -188,9 +195,31 @@ Settings.propTypes = {
   mutations: PropTypes.object
 }
 
-const mapMutationsToProps = ({ ownProps }) => ({
-  updateTextingHours: (textingHoursStart, textingHoursEnd) => ({
-    mutation: gql`
+const queries = {
+  data: {
+    gql: gql`
+      query adminGetCampaigns($organizationId: String!) {
+        organization(id: $organizationId) {
+          id
+          name
+          textingHoursEnforced
+          textingHoursStart
+          textingHoursEnd
+        }
+      }
+    `,
+    options: (props) => ({
+      variables: {
+        organizationId: props.match.params.organizationId
+      },
+      fetchPolicy: 'network-only'
+    })
+  }
+}
+
+const mutations = {
+  updateTextingHours: {
+    gql: gql`
       mutation updateTextingHours($textingHoursStart: Int!, $textingHoursEnd: Int!, $organizationId: String!) {
         updateTextingHours(textingHoursStart: $textingHoursStart, textingHoursEnd: $textingHoursEnd, organizationId: $organizationId) {
           id
@@ -198,15 +227,11 @@ const mapMutationsToProps = ({ ownProps }) => ({
           textingHoursStart
           textingHoursEnd
         }
-      }`,
-    variables: {
-      organizationId: ownProps.match.params.organizationId,
-      textingHoursStart,
-      textingHoursEnd
-    }
-  }),
-  updateTextingHoursEnforcement: (textingHoursEnforced) => ({
-    mutation: gql`
+      }
+    `
+  },
+  updateTextingHoursEnforcement: {
+    gql: gql`
       mutation updateTextingHoursEnforcement($textingHoursEnforced: Boolean!, $organizationId: String!) {
         updateTextingHoursEnforcement(textingHoursEnforced: $textingHoursEnforced, organizationId: $organizationId) {
           id
@@ -214,32 +239,9 @@ const mapMutationsToProps = ({ ownProps }) => ({
           textingHoursStart
           textingHoursEnd
         }
-      }`,
-    variables: {
-      organizationId: ownProps.params.organizationId,
-      textingHoursEnforced
-    }
-  })
-})
-
-const mapQueriesToProps = ({ ownProps }) => ({
-  data: {
-    query: gql`query adminGetCampaigns($organizationId: String!) {
-      organization(id: $organizationId) {
-        id
-        name
-        textingHoursEnforced
-        textingHoursStart
-        textingHoursEnd
       }
-    }`,
-    variables: {
-      organizationId: ownProps.params.organizationId
-    },
-    forceFetch: true
+    `
   }
-})
+}
 
-export default loadData(
-    wrapMutations(Settings),
-    { mapQueriesToProps, mapMutationsToProps })
+export default newLoadData({ queries, mutations })(Settings)

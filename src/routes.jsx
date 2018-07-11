@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import App from './components/App'
 import AdminDashboard from './components/AdminDashboard'
 import AdminCampaignList from './containers/AdminCampaignList'
 import AdminCampaignStats from './containers/AdminCampaignStats'
@@ -9,20 +8,20 @@ import AdminOptOutList from './containers/AdminOptOutList'
 import AdminIncomingMessageList from './containers/AdminIncomingMessageList'
 import AdminCampaignEdit from './containers/AdminCampaignEdit'
 import AdminReplySender from './containers/AdminReplySender'
-import TexterDashboard from './components/TexterDashboard'
-import TopNav from './components/TopNav'
+// import TexterDashboard from './components/TexterDashboard'
+// import TopNav from './components/TopNav'
 import DashboardLoader from './containers/DashboardLoader'
-import TexterTodoList from './containers/TexterTodoList'
-import TexterTodo from './containers/TexterTodo'
-import Login from './components/Login'
-import Terms from './containers/Terms'
-import CreateOrganization from './containers/CreateOrganization'
-import JoinTeam from './containers/JoinTeam'
+// import TexterTodoList from './containers/TexterTodoList'
+// import TexterTodo from './containers/TexterTodo'
+// import Login from './components/Login'
+// import Terms from './containers/Terms'
+// import CreateOrganization from './containers/CreateOrganization'
+// import JoinTeam from './containers/JoinTeam'
 import Home from './containers/Home'
 import Settings from './containers/Settings'
-import UserEdit from './containers/UserEdit'
-import TexterFaqs from './components/TexterFaqs'
-import FAQs from './lib/faqs'
+// import UserEdit from './containers/UserEdit'
+// import TexterFaqs from './components/TexterFaqs'
+// import FAQs from './lib/faqs'
 
 const AdminCampaignRoutes = ({ match }) => {
   const campaignPath = '/admin/:organizationId/campaigns/:campaignId'
@@ -37,12 +36,12 @@ const AdminCampaignRoutes = ({ match }) => {
 }
 
 const AdminCampaignListRoutes = ({ match }) => {
-  const lastPath = '/admin/:organizationId/campaigns'
+  const listPath = '/admin/:organizationId/campaigns'
   return (
     <Switch>
-      <Route path={lastPath} exact component={AdminCampaignList} />
-      <Route path={`${lastPath}/:campaignId`} component={AdminCampaignRoutes} />
-      <Redirect path='*' to={match.url} />
+      <Route path={listPath} exact component={AdminCampaignList} />
+      {/* <Route path={`${listPath}/:campaignId`} component={AdminCampaignRoutes} /> */}
+      <Redirect path='*' to={listPath} />
     </Switch>
   )
 }
@@ -51,101 +50,104 @@ const AdminOrganizationRoutes = ({ match }) => {
   const orgPath = '/admin/:organizationId'
   return (
     <Switch>
-      <Route path={`${orgPath}/campaigns`} component={AdminCampaignListRoutes} />
+      <Route path={`${orgPath}/campaigns`} render={props=><h1>Content</h1>} />
+      {/* <Route path={`${orgPath}/campaigns`} component={AdminCampaignListRoutes} />
       <Route path={`${orgPath}/people`} component={AdminPersonList} />
       <Route path={`${orgPath}/optouts`} component={AdminOptOutList} />
       <Route path={`${orgPath}/incoming`} component={AdminIncomingMessageList} />
-      <Route path={`${orgPath}/settings`} component={Settings} />
+      <Route path={`${orgPath}/settings`} component={Settings} /> */}
       <Redirect path='*' to={`${match.url}/campaigns`} />
     </Switch>
   )
 }
 
 const AdminRoutes = (props) => {
-  const { match } = props
+  const { match, onEnter } = props
   return (
-    <AdminDashboard {...props}>
-      <Switch>
-        <Route path={match.url} exact render={indexMatch => (
-          <DashboardLoader path='/admin' {...indexMatch} />
-        )} />
-        <Route path='/admin/:organizationId' component={AdminOrganizationRoutes} />
-        <Redirect path='*' to={match.url} />
-      </Switch>
-    </AdminDashboard>
+    <Switch>
+      <Route path={match.url} exact render={indexProps => (
+        <DashboardLoader path='/admin' {...indexProps} />
+      )} />
+      <Route path='/admin/:organizationId' render={orgProps => (
+        <AdminDashboard onEnter={onEnter} {...orgProps}>
+          <AdminOrganizationRoutes {...orgProps} />
+        </AdminDashboard>
+      )} />
+      <Redirect path='*' to={match.url} />
+    </Switch>
   )
 }
 
 // TODO: Not sure the best way to deal with props: main, topNav, fullScreen
-const TexterRoutes = (props) => {
-  const { match } = props
-  return (
-    <TexterDashboard {...props}>
-      <Switch>
-        <IndexRoute components={{ main: () => <DashboardLoader path='/app' />,
-                                  topNav: (p) => <TopNav title='Spoke Texting' orgId={p.params.organizationId} /> }} />
-        <Route path=':organizationId'>
-          <IndexRedirect to='todos' />
-          <Route path='faqs' components={{
-            main: () => <TexterFaqs faqs={FAQs} />,
-            topNav: (p) => <TopNav title='Account' orgId={p.params.organizationId} /> }} />
-          <Route path='account/:userId' components={{
-            main: (p) => <UserEdit userId={p.params.userId} organizationId={p.params.organizationId} />,
-            topNav: (p) => <TopNav title='Account' orgId={p.params.organizationId} /> }} />
-          <Route path='todos'>
-            <IndexRoute
-              components={{
-                main: TexterTodoList,
-                topNav: (p) => <TopNav title='Spoke Texting' orgId={p.params.organizationId} />
-              }}
-            />
-            <Route path=':assignmentId'>
-              <Route
-                path='text'
-                components={{
-                  fullScreen: (props) => <TexterTodo {...props} messageStatus='needsMessage' />
-                }}
-              />
-              <Route
-                path='reply'
-                components={{
-                  fullScreen: (props) => <TexterTodo {...props} messageStatus='needsResponse' />,
-                  topNav: null
-                }}
-              />
-              <Route
-                path='stale'
-                components={{
-                  fullScreen: (props) => <TexterTodo {...props} messageStatus='convo' />,
-                  topNav: null
-                }}
-              />
-              <Route
-                path='all'
-                components={{
-                  fullScreen: (props) => <TexterTodo {...props} messageStatus='needsMessageOrResponse' />,
-                  topNav: null
-                }}
-              />
-            </Route>
-          </Route>
-        </Route>
-      </Switch>
-    </TexterDashboard>
-  )
-}
+// const TexterRoutes = (props) => {
+//   const { match } = props
+//   return (
+//     <TexterDashboard {...props}>
+//       <Switch>
+//         <IndexRoute components={{ main: () => <DashboardLoader path='/app' />,
+//                                   topNav: (p) => <TopNav title='Spoke Texting' orgId={p.params.organizationId} /> }} />
+//         <Route path=':organizationId'>
+//           <IndexRedirect to='todos' />
+//           <Route path='faqs' components={{
+//             main: () => <TexterFaqs faqs={FAQs} />,
+//             topNav: (p) => <TopNav title='Account' orgId={p.params.organizationId} /> }} />
+//           <Route path='account/:userId' components={{
+//             main: (p) => <UserEdit userId={p.params.userId} organizationId={p.params.organizationId} />,
+//             topNav: (p) => <TopNav title='Account' orgId={p.params.organizationId} /> }} />
+//           <Route path='todos'>
+//             <IndexRoute
+//               components={{
+//                 main: TexterTodoList,
+//                 topNav: (p) => <TopNav title='Spoke Texting' orgId={p.params.organizationId} />
+//               }}
+//             />
+//             <Route path=':assignmentId'>
+//               <Route
+//                 path='text'
+//                 components={{
+//                   fullScreen: (props) => <TexterTodo {...props} messageStatus='needsMessage' />
+//                 }}
+//               />
+//               <Route
+//                 path='reply'
+//                 components={{
+//                   fullScreen: (props) => <TexterTodo {...props} messageStatus='needsResponse' />,
+//                   topNav: null
+//                 }}
+//               />
+//               <Route
+//                 path='stale'
+//                 components={{
+//                   fullScreen: (props) => <TexterTodo {...props} messageStatus='convo' />,
+//                   topNav: null
+//                 }}
+//               />
+//               <Route
+//                 path='all'
+//                 components={{
+//                   fullScreen: (props) => <TexterTodo {...props} messageStatus='needsMessageOrResponse' />,
+//                   topNav: null
+//                 }}
+//               />
+//             </Route>
+//           </Route>
+//         </Route>
+//       </Switch>
+//     </TexterDashboard>
+//   )
+// }
 
 export default function makeRoutes(requireAuth = () => {}) {
   return (
     <Switch>
       <Route path='/' exact component={Home} />
       <Route path='/admin' render={props => <AdminRoutes {...props} onEnter={requireAuth} />} />
-      <Route path='/app' render={props => <TexterRoutes {...props} onEnter={requireAuth} />} />
+      {/* <Route path='/app' render={props => <TexterRoutes {...props} onEnter={requireAuth} />} />
       <Route path='/login' component={Login} />
       <Route path='/terms' component={Terms} />
       <Route path='/invite/:inviteId' render={props => <CreateOrganization {...props} onEnter={requireAuth} />} />
       <Route path='/:organizationUuid/join/:campaignId' render={props => <JoinTeam {...props} onEnter={requireAuth} />} />
-      <Route path='/:organizationUuid/join' render={props => <JoinTeam {...props} onEnter={requireAuth} />} />
+      <Route path='/:organizationUuid/join' render={props => <JoinTeam {...props} onEnter={requireAuth} />} /> */}
       <Redirect path='*' to='/' />
     </Switch>
   )

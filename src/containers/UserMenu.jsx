@@ -91,11 +91,8 @@ class UserMenu extends Component {
 
     return (
       <div>
-        <IconButton
-          onClick={this.handleTouchTap}
-          iconStyle={{ fontSize: '18px' }}
-        >
-          {this.renderAvatar(currentUser, avatarSize)}
+        <IconButton onClick={this.handleTouchTap}>
+          {this.renderAvatar(currentUser, 18)}
         </IconButton>
         <Popover
           open={this.state.open}

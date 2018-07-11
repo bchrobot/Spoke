@@ -119,34 +119,6 @@ Home.propTypes = {
   data: PropTypes.object
 }
 
-const mapQueriesToProps = () => ({
-  data: {
-    query: gql` query getCurrentUser {
-      currentUser {
-        id
-        adminOrganizations:organizations(role:"ADMIN") {
-          id
-        }
-        texterOrganizations:organizations(role:"TEXTER") {
-          id
-        }
-      }
-    }`
-  }
-})
-
-const mapMutationsToProps = () => ({
-  createInvite: (invite) => ({
-    mutation: gql`
-        mutation createInvite($invite: InviteInput!) {
-          createInvite(invite: $invite) {
-            hash
-          }
-        }`,
-    variables: { invite }
-  })
-})
-
 const queries = {
   getCurrentUser: {
     gql: gql`

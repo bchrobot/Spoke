@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import loadData from './hoc/load-data'
 import { withRouter } from 'react-router'
 import gql from 'graphql-tag'
+import { compose } from 'react-apollo'
+
+import { newLoadData } from './hoc/load-data'
 import IncomingMessageFilter from '../components/IncomingMessageFilter'
 import IncomingMessageActions from '../components/IncomingMessageActions'
 import IncomingMessageList from '../components/IncomingMessageList'
 import LoadingIndicator from '../components/LoadingIndicator'
-import wrapMutations from './hoc/wrap-mutations'
 
 export class AdminIncomingMessageList extends Component {
 
@@ -70,11 +71,11 @@ export class AdminIncomingMessageList extends Component {
   }
 
   async handleReassignRequested(newTexterUserId) {
-    await this.props.mutations.reassignCampaignContacts(
-      this.props.params.organizationId,
-      this.state.campaignIdsContactIds,
+    await this.props.mutations.reassignCampaignContacts({
+      organizationId: this.props.match.params.organizationId,
+      campaignIdsContactIds: this.state.campaignIdsContactIds,
       newTexterUserId
-    )
+    })
     this.setState({
       utc: Date.now().toString(),
       needsRender: true
@@ -149,9 +150,9 @@ export class AdminIncomingMessageList extends Component {
   }
 }
 
-const mapQueriesToProps = ({ ownProps }) => ({
+const queries = {
   organization: {
-    query: gql`
+    gql: gql`
       query Q($organizationId: String!) {
         organization(id: $organizationId) {
           id
@@ -173,16 +174,18 @@ const mapQueriesToProps = ({ ownProps }) => ({
         }
       }
     `,
-    variables: {
-      organizationId: ownProps.params.organizationId
-    },
-    forceFetch: true
+    options: (props) => ({
+      variables: {
+        organizationId: props.match.params.organizationId
+      },
+      fetchPolicy: 'network-only'
+    })
   }
-})
+}
 
-const mapMutationsToProps = () => ({
-  reassignCampaignContacts: (organizationId, campaignIdsContactIds, newTexterUserId) => ({
-    mutation: gql`
+const mutations = {
+  reassignCampaignContacts: {
+    gql: gql`
       mutation reassignCampaignContacts(
         $organizationId: String!
         $campaignIdsContactIds: [CampaignIdContactId]!
@@ -197,12 +200,11 @@ const mapMutationsToProps = () => ({
           assignmentId
         }
       }
-    `,
-    variables: { organizationId, campaignIdsContactIds, newTexterUserId }
-  })
-})
+    `
+  }
+}
 
-export default loadData(withRouter(wrapMutations(AdminIncomingMessageList)), {
-  mapQueriesToProps,
-  mapMutationsToProps
-})
+export default compose(
+  newLoadData({ queries, mutations }),
+  withRouter
+)(AdminIncomingMessageList)
