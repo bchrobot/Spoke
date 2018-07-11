@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, browserHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
+import { browserHistory } from 'react-router'
+import { BrowserRouter } from 'react-router-dom'
+
 import { StyleSheet } from 'aphrodite'
 import errorCatcher from './error-catcher'
 import makeRoutes from '../routes'
@@ -9,6 +10,7 @@ import Store from '../store'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClientSingleton from '../network/apollo-client-singleton'
 import { login, logout } from './auth-service'
+import App from '../components/App'
 
 window.onerror = (msg, file, line, col, error) => { errorCatcher(error) }
 window.addEventListener('unhandledrejection', (event) => { errorCatcher(event.reason) })
@@ -17,14 +19,17 @@ window.AuthService = {
   logout
 }
 
-const store = new Store(browserHistory, window.INITIAL_STATE)
-const history = syncHistoryWithStore(browserHistory, store.data)
+const store = new Store(browserHistory, {})
 
 StyleSheet.rehydrate(window.RENDERED_CLASS_NAMES)
 
 ReactDOM.render(
   <ApolloProvider store={store.data} client={ApolloClientSingleton}>
-    <Router history={history} routes={makeRoutes()} />
+    <App>
+      <BrowserRouter>
+        {makeRoutes()}
+      </BrowserRouter>
+    </App>
   </ApolloProvider>,
   document.getElementById('mount')
 )

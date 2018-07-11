@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
 })
 
 class TexterDashboard extends React.Component {
+  componentWillMount() {
+    this.props.onEnter()
+  }
+
   render() {
     const { main, topNav, fullScreen } = this.props
     return fullScreen || (
@@ -33,8 +37,9 @@ class TexterDashboard extends React.Component {
 }
 
 TexterDashboard.propTypes = {
-  router: PropTypes.object,
-  params: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.object,
+  onEnter: PropTypes.func,
   children: PropTypes.object,
   location: PropTypes.object,
   main: PropTypes.element,
