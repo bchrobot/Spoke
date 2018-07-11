@@ -42,6 +42,11 @@ class CreateOrganization extends React.Component {
   formSchema = yup.object({
     name: yup.string().required()
   })
+
+  componentWillMount() {
+    this.props.onEnter()
+  }
+
   renderInvalid() {
     return (
       <div>
@@ -133,7 +138,8 @@ CreateOrganization.propTypes = {
   mutations: PropTypes.object,
   history: PropTypes.object,
   userData: PropTypes.object,
-  inviteData: PropTypes.object
+  inviteData: PropTypes.object,
+  onEnter: PropTypes.func
 }
 
 const mapMutationsToProps = () => ({
