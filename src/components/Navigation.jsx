@@ -21,7 +21,7 @@ const Navigation = function Navigation(props) {
           <ListItem
             key={section.name}
             primaryText={section.name}
-            onClick={() => props.router.push(section.url)}
+            onClick={() => props.history.push(section.url)}
           />
         ))}
         <Divider />
@@ -34,7 +34,7 @@ const Navigation = function Navigation(props) {
 Navigation.propTypes = {
   sections: PropTypes.array,
   switchListItem: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 }
 
 export default withRouter(Navigation)

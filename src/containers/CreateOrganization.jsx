@@ -66,7 +66,7 @@ class CreateOrganization extends React.Component {
                     this.props.userData.currentUser.id,
                     this.props.inviteData.inviteByHash[0].id
                   )
-                this.props.router.push(`/admin/${newOrganization.data.createOrganization.id}`)
+                this.props.history.push(`/admin/${newOrganization.data.createOrganization.id}`)
               }}
             >
               <Form.Field
@@ -131,7 +131,7 @@ const mapQueriesToProps = ({ ownProps }) => ({
 
 CreateOrganization.propTypes = {
   mutations: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   userData: PropTypes.object,
   inviteData: PropTypes.object
 }

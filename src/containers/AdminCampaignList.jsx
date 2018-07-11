@@ -39,7 +39,7 @@ class AdminCampaignList extends React.Component {
       throw new Error(newCampaign.errors)
     }
 
-    this.props.router.push(
+    this.props.history.push(
       `/admin/${organizationId}/campaigns/${newCampaign.data.createCampaign.id}/edit?new=true`
     )
   }
@@ -89,7 +89,7 @@ class AdminCampaignList extends React.Component {
 AdminCampaignList.propTypes = {
   params: PropTypes.object,
   mutations: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 }
 
 const mapMutationsToProps = () => ({
