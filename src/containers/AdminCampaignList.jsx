@@ -5,10 +5,9 @@ import gql from 'graphql-tag'
 import { compose } from 'react-apollo'
 
 import Button from '@material-ui/core/Button'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Menu from '@material-ui/core/Menu'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import AddIcon from '@material-ui/icons/Add'
 
@@ -25,15 +24,12 @@ class AdminCampaignList extends React.Component {
     this.state = {
       isCreating: false,
       campaignsFilter: {
-        anchorEl: null,
         isArchived: false
       }
     }
 
     this.handleClickNewButton = this.handleClickNewButton.bind(this)
-    this.handleClickFilter = this.handleClickFilter.bind(this)
-    this.handleFilterChange = this.handleFilterChange.bind(this)
-    this.handleCloseFilter = this.handleCloseFilter.bind(this)
+    this.handleSelectChange = this.handleSelectChange.bind(this)
   }
 
   handleClickNewButton = async () => {
@@ -61,23 +57,10 @@ class AdminCampaignList extends React.Component {
     )
   }
 
-  handleClickFilter(event) {
-    const { campaignsFilter } = this.state
-    campaignsFilter.anchorEl = event.currentTarget
-    this.setState({ campaignsFilter })
-  }
-
-  handleFilterChange = isArchived => event => {
+  handleSelectChange = event => {
     const campaignsFilter = {
-      isArchived,
-      anchorEl: null
+      isArchived: event.target.value === 'archived'
     }
-    this.setState({ campaignsFilter })
-  }
-
-  handleCloseFilter() {
-    const { campaignsFilter } = this.state
-    campaignsFilter.anchorEl = null
     this.setState({ campaignsFilter })
   }
 
@@ -85,41 +68,20 @@ class AdminCampaignList extends React.Component {
     const { campaignsFilter } = this.state
     const { anchorEl, isArchived } = campaignsFilter
     return (
-      <div>
-        <List component='nav'>
-          <ListItem
-            button
-            aria-haspopup='true'
-            aria-controls='campaign-state-menu'
-            aria-label='Campaign state'
-            onClick={this.handleClickFilter}
-          >
-            <ListItemText
-              primary='Campaign state'
-              secondary={isArchived ? 'Archived' : 'Current'}
-            />
-          </ListItem>
-        </List>
-        <Menu
-          id='campaign-state-menu'
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleCloseFilter}
+      <FormControl>
+        <InputLabel htmlFor='campaign-filter'>Campaign State</InputLabel>
+        <Select
+          value={this.state.campaignsFilter.isArchived ? 'archived' : 'current'}
+          onChange={this.handleSelectChange}
+          inputProps={{
+            name: 'campaign-filter',
+            id: 'campaign-filter',
+          }}
         >
-          <MenuItem
-            selected={!isArchived}
-            onClick={this.handleFilterChange(false)}
-          >
-            Current
-          </MenuItem>
-          <MenuItem
-            selected={isArchived}
-            onClick={this.handleFilterChange(true)}
-          >
-            Archived
-          </MenuItem>
-        </Menu>
-      </div>
+          <MenuItem value='current'>Current</MenuItem>
+          <MenuItem value='archived'>Archived</MenuItem>
+        </Select>
+      </FormControl>
     )
   }
 
