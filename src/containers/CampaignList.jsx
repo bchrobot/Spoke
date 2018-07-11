@@ -34,13 +34,13 @@ const campaignInfoFragment = `
 
 const inlineStyles = {
   past: {
-    opacity: 0.6
+    style: { opacity: 0.6 }
   },
   warn: {
-    color: theme.colors.orange
+    style: { color: theme.colors.orange }
   },
   good: {
-    color: theme.colors.green
+    style: { color: theme.colors.green }
   }
 }
 
@@ -50,7 +50,7 @@ class CampaignList extends React.Component {
     const { adminPerms } = this.props
 
     let listItemStyle = {}
-    let leftIcon = ''
+    let leftIcon = null
     if (isArchived) {
       listItemStyle = inlineStyles.past
     } else if (!isStarted || hasUnassignedContacts) {
@@ -94,16 +94,13 @@ class CampaignList extends React.Component {
     const campaignUrl = `/admin/${this.props.organizationId}/campaigns/${campaign.id}`
     return (
       <ListItem
-        style={listItemStyle}
         key={campaign.id}
         onClick={() => (!isStarted ?
           this.props.history.push(`${campaignUrl}/edit`) :
           this.props.history.push(campaignUrl))}
       >
-        <ListItemIcon>
-          {leftIcon}
-        </ListItemIcon>
-        <ListItemText primary={primaryText} secondary={secondaryText} />
+        {leftIcon && <ListItemIcon>{leftIcon}</ListItemIcon>}
+        <ListItemText primary={primaryText} primaryTypographyProps={listItemStyle} secondary={secondaryText} />
         <ListItemSecondaryAction>
           {adminPerms ? (
             campaign.isArchived ? (

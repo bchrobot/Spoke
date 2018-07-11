@@ -19,12 +19,21 @@ import LoadingIndicator from '../components/LoadingIndicator'
 import CampaignList from './CampaignList'
 
 class AdminCampaignList extends React.Component {
-  state = {
-    isCreating: false,
-    campaignsFilter: {
-      anchorEl: null,
-      isArchived: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isCreating: false,
+      campaignsFilter: {
+        anchorEl: null,
+        isArchived: false
+      }
     }
+
+    this.handleClickNewButton = this.handleClickNewButton.bind(this)
+    this.handleClickFilter = this.handleClickFilter.bind(this)
+    this.handleFilterChange = this.handleFilterChange.bind(this)
+    this.handleCloseFilter = this.handleCloseFilter.bind(this)
   }
 
   handleClickNewButton = async () => {
@@ -58,7 +67,7 @@ class AdminCampaignList extends React.Component {
     this.setState({ campaignsFilter })
   }
 
-  handleFilterChange(isArchived) {
+  handleFilterChange = isArchived => event => {
     const campaignsFilter = {
       isArchived,
       anchorEl: null

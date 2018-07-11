@@ -50,9 +50,8 @@ const AdminOrganizationRoutes = ({ match }) => {
   const orgPath = '/admin/:organizationId'
   return (
     <Switch>
-      <Route path={`${orgPath}/campaigns`} render={props=><h1>Content</h1>} />
-      {/* <Route path={`${orgPath}/campaigns`} component={AdminCampaignListRoutes} />
-      <Route path={`${orgPath}/people`} component={AdminPersonList} />
+      <Route path={`${orgPath}/campaigns`} component={AdminCampaignListRoutes} />
+      {/* <Route path={`${orgPath}/people`} component={AdminPersonList} />
       <Route path={`${orgPath}/optouts`} component={AdminOptOutList} />
       <Route path={`${orgPath}/incoming`} component={AdminIncomingMessageList} />
       <Route path={`${orgPath}/settings`} component={Settings} /> */}
