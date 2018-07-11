@@ -2,12 +2,14 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import gql from 'graphql-tag'
 
-import WarningIcon from 'material-ui/svg-icons/alert/warning'
-import DoneIcon from 'material-ui/svg-icons/action/done'
-import Avatar from 'material-ui/Avatar'
-import CircularProgress from 'material-ui/CircularProgress'
-import { Card, CardHeader, CardText } from 'material-ui/Card'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
+import Avatar from '@material-ui/core/Avatar'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import WarningIcon from '@material-ui/icons/Warning'
+import DoneIcon from '@material-ui/icons/Done'
 
 import { newLoadData } from '../containers/hoc/load-data'
 import CampaignBasicsForm from '../components/CampaignBasicsForm'
@@ -410,17 +412,20 @@ class AdminCampaignEdit extends React.Component {
         </div>
         <div>
           {this.props.campaignData.campaign.isArchived ? (
-            <RaisedButton
+            <Button
+              variant='contained'
               label='Unarchive'
               onClick={async() => await this.props.mutations.unarchiveCampaign(this.props.campaignData.campaign.id)}
             />
           ) : (
-            <RaisedButton
+            <Button
+              variant='contained'
               label='Archive'
               onClick={async() => await this.props.mutations.archiveCampaign(this.props.campaignData.campaign.id)}
             />
           )}
-          <RaisedButton
+          <Button
+            variant='contained'
             primary
             label='Start This Campaign!'
             disabled={!isCompleted}
@@ -485,18 +490,24 @@ class AdminCampaignEdit extends React.Component {
           } else if (!sectionCanExpandOrCollapse) {
             cardHeaderStyle.backgroundColor = theme.colors.lightGray
           } else if (sectionIsDone) {
-            avatar = (<Avatar
-              icon={<DoneIcon style={{ fill: theme.colors.darkGreen }} />}
-              style={avatarStyle}
-              size={25}
-            />)
+            avatar = (
+              <Avatar
+                style={avatarStyle}
+                size={25}
+              >
+                <DoneIcon style={{ fill: theme.colors.darkGreen }} />
+              </Avatar>
+            )
             cardHeaderStyle.backgroundColor = theme.colors.green
           } else if (!sectionIsDone) {
-            avatar = (<Avatar
-              icon={<WarningIcon style={{ fill: theme.colors.orange }} />}
-              style={avatarStyle}
-              size={25}
-            />)
+            avatar = (
+              <Avatar
+                style={avatarStyle}
+                size={25}
+              >
+                <WarningIcon style={{ fill: theme.colors.orange }} />
+              </Avatar>
+            )
             cardHeaderStyle.backgroundColor = theme.colors.yellow
           }
 
@@ -522,11 +533,11 @@ class AdminCampaignEdit extends React.Component {
                 showExpandableButton={!sectionIsSaving && sectionCanExpandOrCollapse}
                 avatar={avatar}
               />
-              <CardText
+              <CardContent
                 expandable
               >
                  {this.renderCampaignFormSection(section, sectionIsSaving)}
-              </CardText>
+              </CardContent>
             </Card>
           )
         })}

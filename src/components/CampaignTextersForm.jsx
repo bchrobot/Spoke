@@ -1,19 +1,24 @@
 import type from 'prop-types'
 import React from 'react'
-import Slider from './Slider'
-import AutoComplete from 'material-ui/AutoComplete'
-import IconButton from 'material-ui/IconButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import GSForm from '../components/forms/GSForm'
-import yup from 'yup'
 import Form from 'react-formal'
-import { MenuItem } from 'material-ui/Menu'
+import yup from 'yup'
+import _ from 'lodash'
+import { StyleSheet, css } from 'aphrodite'
+
+import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+import DeleteIcon from '@material-ui/icons/Delete'
+
+import theme from '../styles/theme'
+import GSForm from '../components/forms/GSForm'
+import Slider from './Slider'
+import AutoComplete from '../components/lib/AutoComplete'
 import OrganizationJoinLink from './OrganizationJoinLink'
 import CampaignFormSectionHeading from './CampaignFormSectionHeading'
-import { StyleSheet, css } from 'aphrodite'
-import theme from '../styles/theme'
-import Toggle from 'material-ui/Toggle'
-import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
 const styles = StyleSheet.create({
   sliderContainer: {
@@ -105,6 +110,12 @@ export default class CampaignTextersForm extends React.Component {
     autoSplit: false,
     focusedTexter: null,
     useDynamicAssignment: this.formValues().useDynamicAssignment
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.handleToggleChange = this.handleToggleChange.bind(this)
   }
 
   handleToggleChange() {
@@ -240,16 +251,10 @@ export default class CampaignTextersForm extends React.Component {
   })
 
   formValues() {
+    const texters = _.orderBy(this.props.formValues.texters, ['firstName'], ['asc'])
     return {
       ...this.props.formValues,
-      texters: this.props.formValues.texters.sort((texter1, texter2) => {
-        if (texter1.firstName < texter2.firstName) {
-          return -1
-        } else if (texter1.firstName > texter2.firstName) {
-          return 1
-        }
-        return 0
-      })
+      texters
     }
   }
 
@@ -257,16 +262,10 @@ export default class CampaignTextersForm extends React.Component {
     const { orgTexters } = this.props
     const { texters } = this.formValues()
 
-    const dataSource = orgTexters
+    const options = orgTexters
       .filter((orgTexter) =>
         !texters.find((texter) => texter.id === orgTexter.id))
-      .map((orgTexter) =>
-          this.dataSourceItem(orgTexter.displayName,
-          orgTexter.id
-        )
-    )
-
-    const filter = (searchText, key) => ((key === 'allTexters') ? true : AutoComplete.caseInsensitiveFilter(searchText, key))
+      .map((orgTexter) => ({ value: orgTexter.id, label: orgTexter.displayName }))
 
     const autocomplete = (
       <AutoComplete
@@ -274,31 +273,23 @@ export default class CampaignTextersForm extends React.Component {
         style={inlineStyles.autocomplete}
         autoFocus
         onFocus={() => this.setState({ searchText: '' })}
-        onUpdateInput={(searchText) => this.setState({ searchText })}
-        searchText={this.state.searchText}
-        filter={filter}
-        hintText='Search for texters to assign'
-        dataSource={dataSource}
-        onNewRequest={(value) => {
-          // If you're searching but get no match, value is a string
-          // representing your search term, but we only want to handle matches
-          if (typeof value === 'object') {
-            const texterId = value.value.key
-            const newTexter = this.props.orgTexters.find((texter) => texter.id === texterId)
-            this.onChange({
-              texters: [
-                ...this.formValues().texters,
-                {
-                  id: texterId,
-                  firstName: newTexter.firstName,
-                  assignment: {
-                    contactsCount: 0,
-                    needsMessageCount: 0
-                  }
+        placeholder='Search for texters to assign'
+        options={options}
+        handleChange={(value) => {
+          const newTexter = this.props.orgTexters.find((texter) => texter.id === value)
+          this.onChange({
+            texters: [
+              ...this.formValues().texters,
+              {
+                id: texterId,
+                firstName: newTexter.firstName,
+                assignment: {
+                  contactsCount: 0,
+                  needsMessageCount: 0
                 }
-              ]
-            })
-          }
+              }
+            ]
+          })
         }}
       />
     )
@@ -436,13 +427,17 @@ export default class CampaignTextersForm extends React.Component {
           title='Who should send the texts?'
           subtitle={subtitle}
         />
-        <div>
-          <Toggle
+        <FormGroup row>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.state.useDynamicAssignment}
+                onChange={this.handleToggleChange}
+              />
+            }
             label='Dynamically assign contacts'
-            toggled={this.state.useDynamicAssignment}
-            onToggle={this.handleToggleChange.bind(this)}
           />
-        </div>
+        </FormGroup>
         <GSForm
           schema={this.formSchema}
           value={this.formValues()}
@@ -452,7 +447,8 @@ export default class CampaignTextersForm extends React.Component {
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {this.showSearch()}
             <div>
-              <RaisedButton
+              <Button
+                variant='contained'
                 label='Add All'
                 onClick={(() => this.addAllTexters())}
               />

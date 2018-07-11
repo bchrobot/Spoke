@@ -1,35 +1,39 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { withRouter } from 'react-router'
+import Form from 'react-formal'
+import gql from 'graphql-tag'
+import yup from 'yup'
 import { StyleSheet, css } from 'aphrodite'
+
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Toolbar from '@material-ui/core/Toolbar'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardActions from '@material-ui/core/CardActions'
+import Divider from '@material-ui/core/Divider'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Snackbar from '@material-ui/core/Snackbar'
+import grey from '@material-ui/core/colors/grey'
+import HomeIcon from '@material-ui/icons/Home'
+import CreateIcon from '@material-ui/icons/Create'
+import CloseIcon from '@material-ui/icons/Close'
+
+import { getChildren, getTopMostParent, interactionStepForId, log, isBetweenTextingHours } from '../lib'
+import { applyScript } from '../lib/scripts'
+import loadData from './hoc/load-data'
+import wrapMutations from './hoc/wrap-mutations'
+import Empty from '../components/Empty'
 import ContactToolbar from '../components/ContactToolbar'
 import MessageList from '../components/MessageList'
 import CannedResponseMenu from '../components/CannedResponseMenu'
 import AssignmentTexterSurveys from '../components/AssignmentTexterSurveys'
-import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
-import NavigateHomeIcon from 'material-ui/svg-icons/action/home'
-import { grey100 } from 'material-ui/styles/colors'
-import IconButton from 'material-ui/IconButton/IconButton'
-import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
-import { Card, CardActions, CardTitle } from 'material-ui/Card'
-import Divider from 'material-ui/Divider'
-import { applyScript } from '../lib/scripts'
-import gql from 'graphql-tag'
-import loadData from './hoc/load-data'
-import yup from 'yup'
-import GSForm from '../components/forms/GSForm'
-import Form from 'react-formal'
 import GSSubmitButton from '../components/forms/GSSubmitButton'
 import SendButton from '../components/SendButton'
 import BulkSendButton from '../components/BulkSendButton'
 import SendButtonArrow from '../components/SendButtonArrow'
-import CircularProgress from 'material-ui/CircularProgress'
-import Snackbar from 'material-ui/Snackbar'
-import { getChildren, getTopMostParent, interactionStepForId, log, isBetweenTextingHours } from '../lib'
-import { withRouter } from 'react-router'
-import wrapMutations from './hoc/wrap-mutations'
-import Empty from '../components/Empty'
-import CreateIcon from 'material-ui/svg-icons/content/create'
+import GSForm from '../components/forms/GSForm'
 
 const styles = StyleSheet.create({
   mobile: {
@@ -97,7 +101,7 @@ const styles = StyleSheet.create({
     overflow: '-moz-scrollbars-vertical'
   },
   bottomFixedSection: {
-    borderTop: `1px solid ${grey100}`,
+    borderTop: `1px solid ${grey[100]}`,
     flex: '0 0 auto',
     marginBottom: 'none'
   },
@@ -579,12 +583,12 @@ export class AssignmentTexterContact extends React.Component {
     const { messageStatus } = contact
     let button = null
     if (messageStatus === 'closed') {
-      button = (<RaisedButton
+      button = (<Button
         onClick={() => this.handleEditMessageStatus('needsResponse')}
         label='Reopen'
       />)
     } else if (messageStatus === 'needsResponse' || messageStatus === 'messaged' || messageStatus === 'convo') {
-      button = (<RaisedButton
+      button = (<Button
         onClick={this.handleClickCloseContactButton}
         label='Skip Reply'
       />)
@@ -604,26 +608,20 @@ export class AssignmentTexterContact extends React.Component {
       return (
         <div>
           <Toolbar style={inlineStyles.actionToolbarFirst}>
-            <ToolbarGroup
-              firstChild
-            >
-              <SendButton
-                threeClickEnabled={campaign.organization.threeClickEnabled}
-                onFinalTouchTap={this.handleClickSendMessageButton}
-                disabled={this.state.disabled}
-              />
-              {window.NOT_IN_USA && window.ALLOW_SEND_ALL && window.BULK_SEND_CHUNK_SIZE ? <BulkSendButton
-                assignment={assignment}
-                onFinishContact={onFinishContact}
-                bulkSendMessages={this.bulkSendMessages}
-                setDisabled={this.setDisabled.bind(this)}
-              /> : ''}
-              <div
-                style={{ float: 'right', marginLeft: 20 }}
-              >
-                {navigationToolbarChildren}
-              </div>
-            </ToolbarGroup>
+            <SendButton
+              threeClickEnabled={campaign.organization.threeClickEnabled}
+              onFinalTouchTap={this.handleClickSendMessageButton}
+              disabled={this.state.disabled}
+            />
+            {window.NOT_IN_USA && window.ALLOW_SEND_ALL && window.BULK_SEND_CHUNK_SIZE ? <BulkSendButton
+              assignment={assignment}
+              onFinishContact={onFinishContact}
+              bulkSendMessages={this.bulkSendMessages}
+              setDisabled={this.setDisabled.bind(this)}
+            /> : ''}
+            <div style={{ float: 'right', marginLeft: 20 }}>
+              {navigationToolbarChildren}
+            </div>
           </Toolbar>
         </div>
       )
@@ -634,18 +632,18 @@ export class AssignmentTexterContact extends React.Component {
             className={css(styles.mobile)}
             style={inlineStyles.actionToolbar}
           >
-            <ToolbarGroup
+            <div
               style={inlineStyles.mobileToolBar}
               className={css(styles.lgMobileToolBar)}
               firstChild
             >
-              <RaisedButton
+              <Button
                 secondary
                 label='Opt out'
                 onClick={this.handleOpenDialog}
                 tooltip='Opt out this contact'
               />
-              <RaisedButton
+              <Button
                 style={inlineStyles.mobileCannedReplies}
                 label='Canned replies'
                 onClick={this.handleOpenPopover}
@@ -656,7 +654,7 @@ export class AssignmentTexterContact extends React.Component {
               >
                 {navigationToolbarChildren}
               </div>
-            </ToolbarGroup>
+            </div>
           </Toolbar>
         </div>
       )
@@ -664,20 +662,18 @@ export class AssignmentTexterContact extends React.Component {
       return (
         <div>
           <Toolbar style={inlineStyles.actionToolbarFirst}>
-            <ToolbarGroup
-              firstChild
-            >
+            <div firstChild>
               <SendButton
                 threeClickEnabled={campaign.organization.threeClickEnabled}
                 onFinalTouchTap={this.handleClickSendMessageButton}
                 disabled={this.state.disabled}
               />
               {this.renderNeedsResponseToggleButton(contact)}
-              <RaisedButton
+              <Button
                 label='Canned responses'
                 onClick={this.handleOpenPopover}
               />
-              <RaisedButton
+              <Button
                 secondary
                 label='Opt out'
                 onClick={this.handleOpenDialog}
@@ -689,7 +685,7 @@ export class AssignmentTexterContact extends React.Component {
               >
                 {navigationToolbarChildren}
               </div>
-            </ToolbarGroup>
+            </div>
           </Toolbar>
         </div>
       )
@@ -710,7 +706,7 @@ export class AssignmentTexterContact extends React.Component {
             tooltip='Return Home'
             tooltipPosition='bottom-center'
           >
-            <NavigateHomeIcon />
+            <HomeIcon />
           </IconButton>
         )}
       />
@@ -740,7 +736,7 @@ export class AssignmentTexterContact extends React.Component {
     }
     return (
       <Card>
-        <CardTitle
+        <CardHeader
           className={css(styles.optOutCard)}
           title='Opt out user'
         />
@@ -760,7 +756,7 @@ export class AssignmentTexterContact extends React.Component {
               multiLine
             />
             <div className={css(styles.dialogActions)}>
-              <FlatButton
+              <Button
                 style={inlineStyles.dialogButton}
                 label='Cancel'
                 onClick={this.handleCloseDialog}
@@ -859,8 +855,25 @@ export class AssignmentTexterContact extends React.Component {
           style={inlineStyles.snackbar}
           open={!!this.state.snackbarError}
           message={this.state.snackbarError || ''}
-          action={this.state.snackbarActionTitle}
-          onActionClick={this.state.snackbarOnClick}
+          action={[
+            <Button
+              key="snackbar-action"
+              color="secondary"
+              size="small"
+              onClick={this.state.snackbarOnClick}
+            >
+              {this.state.snackbarActionTitle}
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={this.handleClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
         />
       </div>
     )

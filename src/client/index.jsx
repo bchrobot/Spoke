@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { browserHistory } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
-
+import MomentUtils from 'material-ui-pickers/utils/moment-utils'
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { StyleSheet } from 'aphrodite'
 import errorCatcher from './error-catcher'
 import makeRoutes from '../routes'
@@ -25,11 +26,13 @@ StyleSheet.rehydrate(window.RENDERED_CLASS_NAMES)
 
 ReactDOM.render(
   <ApolloProvider client={ApolloClientSingleton}>
-    <App>
-      <BrowserRouter>
-        {makeRoutes()}
-      </BrowserRouter>
-    </App>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <App>
+        <BrowserRouter>
+          {makeRoutes()}
+        </BrowserRouter>
+      </App>
+    </MuiPickersUtilsProvider>
   </ApolloProvider>,
   document.getElementById('mount')
 )
