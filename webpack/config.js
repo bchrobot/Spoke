@@ -27,19 +27,38 @@ if (!DEBUG) {
     fileName: assetMapFile
   }))
   plugins.push(new webpack.optimize.UglifyJsPlugin({
-    sourceMap: true
+    sourceMap: true,
+    compress: {
+      // warnings: false, // Suppress uglification warnings
+      pure_getters: true,
+      // unsafe: true,
+      // unsafe_comps: true,
+      screw_ie8: true
+    },
+    output: {
+      comments: false,
+    }
   }))
   plugins.push(new webpack.LoaderOptionsPlugin({
     minimize: true
   }))
 } else {
   plugins.push(new webpack.HotModuleReplacementPlugin())
-  jsxLoaders.unshift({loader: 'react-hot-loader'})
 }
 
 const config = {
+  mode: (process.env.NODE_ENV || 'production'),
   entry: {
-    bundle: ['babel-polyfill', './src/client/index.jsx']
+    bundle: [
+      'babel-polyfill',
+      'webpack-dev-server/client?http://0.0.0.0:3000',
+      // Documentation is very confusing.
+      // https://stackoverflow.com/a/43875921
+      // https://github.com/webpack/webpack-dev-server/issues/703
+      // https://github.com/webpack/webpack-dev-server/issues/615
+      // 'webpack/hot/only-dev-server',
+      './src/client/index.jsx'
+    ]
   },
   module: {
     rules: [
