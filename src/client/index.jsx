@@ -24,7 +24,7 @@ const store = new Store(browserHistory, {})
 StyleSheet.rehydrate(window.RENDERED_CLASS_NAMES)
 
 ReactDOM.render(
-  <ApolloProvider store={store.data} client={ApolloClientSingleton}>
+  <ApolloProvider client={ApolloClientSingleton}>
     <App>
       <BrowserRouter>
         {makeRoutes()}

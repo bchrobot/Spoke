@@ -1,5 +1,5 @@
 import { schema, resolvers } from '../src/server/api/schema'
-import { graphql } from 'graphql'
+import { graphql } from 'react-apollo'
 import { User, Organization, Campaign, CampaignContact, Assignment, r } from '../src/server/models/'
 import { resolvers as campaignResolvers } from '../src/server/api/campaign'
 import { getContext,
