@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { StyleSheet, css } from 'aphrodite'
 import { compose } from 'react-apollo'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
 import Snackbar from '@material-ui/core/Snackbar'
 
 import { newLoadData } from './hoc/load-data'
@@ -83,14 +84,16 @@ const Stat = ({ title, count }) => (
     key={title}
     style={inlineStyles.stat}
   >
-    <CardHeader
-      title={count}
-      titleStyle={inlineStyles.count}
-    />
-    <CardContent
-      style={inlineStyles.title}
-    >
-      {title}
+    <CardContent>
+      <Typography
+        gutterBottom
+        variant='headline'
+        component='h2'
+        style={inlineStyles.count}
+      >
+        {count}
+      </Typography>
+      <p style={inlineStyles.title}>{title}</p>
     </CardContent>
   </Card>
 )
@@ -181,9 +184,11 @@ class AdminCampaignStats extends React.Component {
                     ( // edit
                     <Button
                       variant='contained'
-                      onClick={() => this.props.history.push(`/admin/${organizationId}/campaigns/${campaignId}/edit`)}
-                      label='Edit'
-                    />
+                      component={Link}
+                      to={`/admin/${organizationId}/campaigns/${campaignId}/edit`}
+                    >
+                      Edit
+                    </Button>
                   ) : null}
                   {adminPerms ?
                     [ // Buttons for Admins (and not Supervolunteers)
@@ -202,29 +207,37 @@ class AdminCampaignStats extends React.Component {
                           })
                           await this.props.mutations.exportCampaign(campaignId)
                         }}
-                        label={exportLabel}
                         disabled={shouldDisableExport}
-                      />),
+                      >
+                        {exportLabel}
+                      </Button>
+                      ),
                       ( // unarchive
-                      campaign.isArchived ?
+                      campaign.isArchived ? (
                         <Button
                           variant='contained'
                           onClick={async () => await this.props.mutations.unarchiveCampaign(campaignId)}
-                          label='Unarchive'
-                        /> : null),
+                        >
+                          Unarchive
+                        </Button>
+                      ): null),
                       ( // archive
-                      !campaign.isArchived ?
+                      !campaign.isArchived ? (
                         <Button
                           variant='contained'
                           onClick={async () => await this.props.mutations.archiveCampaign(campaignId)}
-                          label='Archive'
-                        /> : null),
+                        >
+                          Archive
+                        </Button>
+                      ): null),
                       ( // copy
                       <Button
                         variant='contained'
-                        label='Copy Campaign'
                         onClick={async() => await this.props.mutations.copyCampaign(this.props.match.params.campaignId)}
-                      />)
+                      >
+                        Copy Campaign
+                      </Button>
+                      )
                     ] : null}
                 </div>
               </div>
@@ -273,12 +286,12 @@ class AdminCampaignStats extends React.Component {
 AdminCampaignStats.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
-  getCampaign: PropTypes.object,
+  data: PropTypes.object,
   mutations: PropTypes.object
 }
 
 const queries = {
-  getCampaign: {
+  data: {
     gql: gql`
       query getCampaign($campaignId: String!, $contactsFilter: ContactsFilter!) {
         campaign(id: $campaignId) {
@@ -323,7 +336,7 @@ const queries = {
     `,
     options: (props) => ({
       variables: {
-        campaignId: props.params.campaignId,
+        campaignId: props.match.params.campaignId,
         contactsFilter: {
           messageStatus: 'needsMessage'
         }

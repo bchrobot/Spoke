@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { StyleSheet, css } from 'aphrodite'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
@@ -45,26 +45,17 @@ class TopNav extends React.Component {
     userMenuOpen: false
   }
 
-  renderBack(backToURL) {
-    if (backToURL) {
-      return (
-        <Link to={backToURL}>
-          <IconButton>
-            <ArrowBackIcon style={{ fill: 'white' }} color={theme.colors.white} />
-          </IconButton>
-        </Link>
-      )
-    }
-    return <div />
-  }
-
   render() {
     const { backToURL, orgId, title } = this.props
     return (
       <div className={css(styles.container)}>
         <div className={css(styles.flexColumn)}>
           <div className={css(styles.inline)}>
-            {this.renderBack(backToURL)}
+            {backToURL ? (
+              <IconButton component={Link} to={backToURL}>
+                <ArrowBackIcon style={{ fill: theme.colors.white }} />
+              </IconButton>
+            ) : ''}
           </div>
           <div className={css(styles.inline, styles.header)}>
             {title}

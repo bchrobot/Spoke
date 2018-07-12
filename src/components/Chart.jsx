@@ -23,6 +23,7 @@ const Chart = ({ data }) => {
       <div>
         {pieData.map(({ label, color }) => (
           <span
+            key={label}
             style={{
               backgroundColor: color,
               width: 20,

@@ -28,8 +28,8 @@ const AdminCampaignRoutes = ({ match }) => {
   return (
     <Switch>
       <Route path={campaignPath} exact component={AdminCampaignStats} />
-      <Route path={`${campaignPath}/edit`} component={AdminCampaignEdit} />
-      <Route path={`${campaignPath}/send-replies`} component={AdminReplySender} />
+      {/* <Route path={`${campaignPath}/edit`} component={AdminCampaignEdit} /> */}
+      {/* <Route path={`${campaignPath}/send-replies`} component={AdminReplySender} /> */}
       <Redirect path='*' to={match.url} />
     </Switch>
   )
@@ -40,7 +40,7 @@ const AdminCampaignListRoutes = ({ match }) => {
   return (
     <Switch>
       <Route path={listPath} exact component={AdminCampaignList} />
-      {/* <Route path={`${listPath}/:campaignId`} component={AdminCampaignRoutes} /> */}
+      <Route path={`${listPath}/:campaignId`} component={AdminCampaignRoutes} />
       <Redirect path='*' to={listPath} />
     </Switch>
   )
