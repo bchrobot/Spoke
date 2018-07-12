@@ -20,28 +20,24 @@ const avatarSize = 28
 class UserMenu extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       open: false,
       anchorEl: null
     }
+
+    this.handleMenuClick = this.handleMenuClick.bind(this)
     this.handleReturn = this.handleReturn.bind(this)
     this.handleRequestFaqs = this.handleRequestFaqs.bind(this)
+    this.handleMenuChange = this.handleMenuChange.bind(this)
   }
 
-  handleTouchTap = (event) => {
-    // This prevents ghost click.
-    event.preventDefault()
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget
-    })
+  handleMenuClick = (event) => {
+    this.setState({ anchorEl: event.target })
   }
 
   handleRequestClose = () => {
-    this.setState({
-      open: false
-    })
+    this.setState({ anchorEl: null })
   }
 
   handleMenuChange = value => event => {
@@ -73,14 +69,8 @@ class UserMenu extends Component {
 
 
   renderAvatar(user, size) {
-    // Material-UI seems to not be handling this correctly when doing serverside rendering
-    const inlineStyles = {
-      lineHeight: '1.25',
-      textAlign: 'center',
-      color: 'white',
-      padding: '5px'
-    }
-    return <Avatar style={inlineStyles} size={size}>{user.displayName.charAt(0)}</Avatar>
+    const initials = [user.firstName.charAt(0), user.lastName.charAt(0)].join('')
+    return <Avatar size={size}>{initials}</Avatar>
   }
 
   render() {
@@ -89,52 +79,49 @@ class UserMenu extends Component {
       return <div />
     }
 
+    const { anchorEl } = this.state
+
     return (
       <div>
-        <IconButton onClick={this.handleTouchTap}>
+        <IconButton onClick={this.handleMenuClick}>
           {this.renderAvatar(currentUser, 18)}
         </IconButton>
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
           onClose={this.handleRequestClose}
         >
-          <Menu onChange={this.handleMenuChange} subheader={<li />}>
-            <MenuItem
-              disabled={!this.props.orgId}
-              onClick={this.handleMenuChange('account')}
-            >
-              <ListItemIcon>
-                {this.renderAvatar(currentUser, 40)}
-              </ListItemIcon>
-              <ListItemText
-                inset
-                primary={currentUser.displayName}
-                secondary={currentUser.email}
-              />
-            </MenuItem>
-            <Divider />
-            <ListSubheader>Teams</ListSubheader>
-            {currentUser.organizations.map((organization) => (
-              <MenuItem
-                key={organization.id}
-                onClick={this.handleMenuChange(organization.id)}
-              >
-                {organization.name}
-              </MenuItem>
-            ))}
-            <Divider />
-            <MenuItem onClick={this.handleReturn}>Home</MenuItem>
-            <MenuItem onClick={this.handleRequestFaqs}>FAQs</MenuItem>
-            <Divider />
-            <MenuItem
-              primaryText='Log out'
-              onClick={this.handleMenuChange('logout')}
+          <MenuItem
+            disabled={!this.props.orgId}
+            onClick={this.handleMenuChange('account')}
+          >
+            <ListItemIcon>
+              {this.renderAvatar(currentUser, 40)}
+            </ListItemIcon>
+            <ListItemText
+              inset
+              primary={currentUser.displayName}
+              secondary={currentUser.email}
             />
-          </Menu>
-        </Popover>
+          </MenuItem>
+          <Divider />
+          <ListSubheader>Teams</ListSubheader>
+          {currentUser.organizations.map((organization) => (
+            <MenuItem
+              key={organization.id}
+              onClick={this.handleMenuChange(organization.id)}
+            >
+              {organization.name}
+            </MenuItem>
+          ))}
+          <Divider />
+          <MenuItem onClick={this.handleReturn}>Home</MenuItem>
+          <MenuItem onClick={this.handleRequestFaqs}>FAQs</MenuItem>
+          <Divider />
+          <MenuItem onClick={this.handleMenuChange('logout')}>
+            <ListItemText primary='Log out' />
+          </MenuItem>
+        </Menu>
       </div>
     )
   }
@@ -152,6 +139,8 @@ const queries = {
       query getCurrentUserForMenu {
         currentUser {
           id
+          firstName
+          lastName
           displayName
           email
           organizations {
