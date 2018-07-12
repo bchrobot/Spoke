@@ -179,13 +179,14 @@ export default class CampaignInteractionStepsForm extends React.Component {
             style={{ marginBottom: '10px' }}
           />
         </div> : ''}
-        {interactionStep.interactionSteps.filter((is) => !is.isDeleted).map((is) => {
-          return (
-            <div>
-              {this.renderInteractionStep(is, `Question: ${interactionStep.questionText}`)}
+        {interactionStep.interactionSteps
+          .filter((childStep) => !childStep.isDeleted)
+          .map((childStep) => (
+            <div key={childStep.id}>
+              {this.renderInteractionStep(childStep, `Question: ${interactionStep.questionText}`)}
             </div>
-          )
-        })}
+          ))
+        }
       </div>
 
     </div>)
@@ -203,10 +204,11 @@ export default class CampaignInteractionStepsForm extends React.Component {
         {this.renderInteractionStep(tree)}
         <Button
           variant='raised'
-          primary
-          label={this.props.saveLabel}
+          color='primary'
           onClick={this.onSave.bind(this)}
-        />
+        >
+          {this.props.saveLabel}
+        </Button>
       </div>
     )
   }

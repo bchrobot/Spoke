@@ -56,13 +56,13 @@ export default class CampaignBasicsForm extends React.Component {
           <Form.Field
             name='title'
             label='Title'
-            hintText='e.g. Election Day 2016'
+            placeholder='e.g. Election Day 2016'
             fullWidth
           />
           <Form.Field
             name='description'
             label='Description'
-            hintText='Get out the vote'
+            placeholder='Get out the vote'
             fullWidth
           />
           <Form.Field
@@ -84,7 +84,7 @@ export default class CampaignBasicsForm extends React.Component {
           <Form.Field
             name='logoImageUrl'
             label='Logo Image URL'
-            hintText='https://www.mysite.com/images/logo.png'
+            placeholder='https://www.mysite.com/images/logo.png'
             fullWidth
           />
           <label>Primary color</label>

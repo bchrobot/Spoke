@@ -125,6 +125,24 @@ export default class CampaignTextersForm extends React.Component {
     this.props.onChange({ useDynamicAssignment: !this.state.useDynamicAssignment })
   }
 
+  handleDynamicAssignmentChange() {
+    this.setState({ autoSplit: !this.state.autoSplit }, () => {
+      if (this.state.autoSplit) {
+        const contactsCount = Math.floor(this.formValues().contactsCount / this.formValues().texters.length)
+        const newTexters = this.formValues().texters.map((texter) =>
+          ({
+            ...texter,
+            assignment: {
+              ...texter.assignment,
+              contactsCount
+            }
+          })
+        )
+        this.onChange({ ...this.formValues(), texters: newTexters })
+      }
+    })
+  }
+
   onChange = (formValues) => {
     const existingFormValues = this.formValues()
     const changedTexter = this.state.focusedTexter
@@ -330,7 +348,7 @@ export default class CampaignTextersForm extends React.Component {
     return this.formValues().texters.map((texter, index) => {
       const messagedCount = texter.assignment.contactsCount - texter.assignment.needsMessageCount
       return (
-        <div className={css(styles.texterRow)}>
+        <div key={texter.id} className={css(styles.texterRow)}>
           <div className={css(styles.leftSlider)}>
             <Slider
               maxValue={this.formValues().contactsCount}
@@ -465,34 +483,18 @@ export default class CampaignTextersForm extends React.Component {
               >
                 {`Assigned contacts: ${assignedContacts}/${this.formValues().contactsCount}`}
               </div>
-              <div
-                className={css(styles.splitToggle)}
-              >
-                <Toggle
-                  label='Split assignments'
-                  style={{
-                    width: 'auto',
-                    marginLeft: 'auto'
-                  }}
-                  toggled={this.state.autoSplit}
-                  onToggle={() => {
-                    this.setState({ autoSplit: !this.state.autoSplit }, () => {
-                      if (this.state.autoSplit) {
-                        const contactsCount = Math.floor(this.formValues().contactsCount / this.formValues().texters.length)
-                        const newTexters = this.formValues().texters.map((texter) =>
-                          ({
-                            ...texter,
-                            assignment: {
-                              ...texter.assignment,
-                              contactsCount
-                            }
-                          })
-                        )
-                        this.onChange({ ...this.formValues(), texters: newTexters })
-                      }
-                    })
-                  }}
-                />
+              <div className={css(styles.splitToggle)}>
+                <FormGroup style={{ width: 'auto', marginLeft: 'auto' }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={this.state.autoSplit}
+                        onChange={this.handleDynamicAssignmentChange}
+                      />
+                    }
+                    label='Split assignments'
+                  />
+                </FormGroup>
               </div>
             </div>
             <div className={css(styles.texterRow)}>

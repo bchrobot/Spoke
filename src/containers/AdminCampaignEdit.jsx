@@ -1,15 +1,21 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import gql from 'graphql-tag'
+import { compose } from 'react-apollo'
+import 'url-search-params-polyfill'
 
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import Typography from '@material-ui/core/Typography'
 import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { newLoadData } from '../containers/hoc/load-data'
 import CampaignBasicsForm from '../components/CampaignBasicsForm'
@@ -19,10 +25,14 @@ import CampaignInteractionStepsForm from '../components/CampaignInteractionSteps
 import CampaignCannedResponsesForm from '../components/CampaignCannedResponsesForm'
 import theme from '../styles/theme'
 
+import { withCurrentUser } from '../components/lib/CurrentUserContext'
+import { ErrorBoundary } from '../components/lib/ErrorBoundary'
+
 class AdminCampaignEdit extends React.Component {
   constructor(props) {
     super(props)
-    const isNew = props.location.query.new
+
+    const isNew = this.isNew()
     this.state = {
       expandedSection: isNew ? 0 : null,
       campaignFormValues: props.campaignData.campaign,
@@ -82,6 +92,16 @@ class AdminCampaignEdit extends React.Component {
     })
   }
 
+  handlePanelChange = index => (event, expanded) => {
+    const { expandedSection } = this.state
+
+    if (expanded) {
+      this.setState({ expandedSection: index })
+    } else if (index === expandedSection) {
+      this.setState({ expandedSection: null })
+    }
+  }
+
   onExpandChange = (index, newExpandedState) => {
     const { expandedSection } = this.state
 
@@ -101,7 +121,10 @@ class AdminCampaignEdit extends React.Component {
   }
 
   isNew() {
-    return this.props.location.query.new
+    // React Router dropped support for query URL component so we do it ourselves:
+    // https://github.com/ReactTraining/react-router/issues/4410#issuecomment-283281809
+    const searchParams = new URLSearchParams(this.props.location.search);
+    return searchParams.get('new')
   }
 
   handleChange = (formValues) => {
@@ -256,8 +279,8 @@ class AdminCampaignEdit extends React.Component {
       expandableBySuperVolunteers: false,
       extraProps: {
         optOuts: [], // this.props.organizationData.organization.optOuts, // <= doesn't scale
-        datawarehouseAvailable: this.props.getCampaignData.campaign.datawarehouseAvailable,
-        jobResultMessage: ((this.props.getPendingJobsData.campaign.pendingJobs.filter((job) => (/contacts/.test(job.jobType)))[0] || {}).resultMessage || '')
+        datawarehouseAvailable: this.props.campaignData.campaign.datawarehouseAvailable,
+        jobResultMessage: ((this.props.pendingJobsData.campaign.pendingJobs.filter((job) => (/contacts/.test(job.jobType)))[0] || {}).resultMessage || '')
       }
     }, {
       title: 'Texters',
@@ -270,7 +293,7 @@ class AdminCampaignEdit extends React.Component {
       extraProps: {
         orgTexters: this.props.getOrganizationData.organization.texters,
         organizationUuid: this.props.getOrganizationData.organization.uuid,
-        campaignId: this.props.getCampaignData.campaign.id
+        campaignId: this.props.campaignData.campaign.id
       }
     }, {
       title: 'Interactions',
@@ -281,7 +304,7 @@ class AdminCampaignEdit extends React.Component {
       expandAfterCampaignStarts: true,
       expandableBySuperVolunteers: false,
       extraProps: {
-        customFields: this.props.getCampaignData.campaign.customFields,
+        customFields: this.props.campaignData.campaign.customFields,
         availableActions: this.props.getActions.availableActions
       }
     }, {
@@ -293,13 +316,13 @@ class AdminCampaignEdit extends React.Component {
       expandAfterCampaignStarts: true,
       expandableBySuperVolunteers: true,
       extraProps: {
-        customFields: this.props.getCampaignData.campaign.customFields
+        customFields: this.props.campaignData.campaign.customFields
       }
     }]
   }
 
   sectionSaveStatus(section) {
-    const pendingJobs = this.props.getPendingJobsData.campaign.pendingJobs
+    const pendingJobs = this.props.pendingJobsData.campaign.pendingJobs
     let sectionIsSaving = false
     let relatedJob = null
     let savePercent = 0
@@ -331,20 +354,22 @@ class AdminCampaignEdit extends React.Component {
     const ContentComponent = section.content
     const formValues = this.getSectionState(section)
     return (
-      <ContentComponent
-        onChange={this.handleChange}
-        formValues={formValues}
-        saveLabel={this.isNew() ? 'Save and goto next section' : 'Save'}
-        saveDisabled={shouldDisable}
-        ensureComplete={this.props.getCampaignData.campaign.isStarted}
-        onSubmit={this.handleSubmit}
-        {...section.extraProps}
-      />
+      <ErrorBoundary>
+        <ContentComponent
+          onChange={this.handleChange}
+          formValues={formValues}
+          saveLabel={this.isNew() ? 'Save and goto next section' : 'Save'}
+          saveDisabled={shouldDisable}
+          ensureComplete={this.props.campaignData.campaign.isStarted}
+          onSubmit={this.handleSubmit}
+          {...section.extraProps}
+        />
+      </ErrorBoundary>
     )
   }
 
   renderHeader() {
-    const notStarting = this.props.getCampaignData.campaign.isStarted ? (
+    const notStarting = this.props.campaignData.campaign.isStarted ? (
       <div
         style={{
           color: theme.colors.green,
@@ -385,7 +410,7 @@ class AdminCampaignEdit extends React.Component {
   }
 
   renderStartButton() {
-    if (!this.props.match.params.adminPerms) {
+    if (!this.props.currentUser.adminPerms) {
       // Supervolunteers don't have access to start the campaign or un/archive it
       return null
     }
@@ -414,20 +439,21 @@ class AdminCampaignEdit extends React.Component {
           {this.props.campaignData.campaign.isArchived ? (
             <Button
               variant='contained'
-              label='Unarchive'
               onClick={async() => await this.props.mutations.unarchiveCampaign(this.props.campaignData.campaign.id)}
-            />
+            >
+              Unarchive
+            </Button>
           ) : (
             <Button
               variant='contained'
-              label='Archive'
               onClick={async() => await this.props.mutations.archiveCampaign(this.props.campaignData.campaign.id)}
-            />
+            >
+              Archive
+            </Button>
           )}
           <Button
             variant='contained'
-            primary
-            label='Start This Campaign!'
+            color='primary'
             disabled={!isCompleted}
             onClick={async () => {
               this.setState({
@@ -438,7 +464,9 @@ class AdminCampaignEdit extends React.Component {
                 startingCampaign: false
               })
             }}
-          />
+          >
+            Start This Campaign!
+          </Button>
         </div>
       </div>
     )
@@ -447,7 +475,7 @@ class AdminCampaignEdit extends React.Component {
   render() {
     const sections = this.sections()
     const { expandedSection } = this.state
-    const { adminPerms } = this.props.match.params
+    const { adminPerms } = this.props.currentUser
     return (
       <div>
         {this.renderHeader()}
@@ -458,10 +486,6 @@ class AdminCampaignEdit extends React.Component {
           let avatar = null
           const cardHeaderStyle = {
             backgroundColor: theme.colors.lightGray
-          }
-          const avatarStyle = {
-            display: 'inline-block',
-            verticalAlign: 'middle'
           }
 
           const { sectionIsSaving, savePercent } = this.sectionSaveStatus(section)
@@ -490,55 +514,30 @@ class AdminCampaignEdit extends React.Component {
           } else if (!sectionCanExpandOrCollapse) {
             cardHeaderStyle.backgroundColor = theme.colors.lightGray
           } else if (sectionIsDone) {
-            avatar = (
-              <Avatar
-                style={avatarStyle}
-                size={25}
-              >
-                <DoneIcon style={{ fill: theme.colors.darkGreen }} />
-              </Avatar>
-            )
+            avatar = <DoneIcon style={{ fill: theme.colors.darkGreen }} />
             cardHeaderStyle.backgroundColor = theme.colors.green
           } else if (!sectionIsDone) {
-            avatar = (
-              <Avatar
-                style={avatarStyle}
-                size={25}
-              >
-                <WarningIcon style={{ fill: theme.colors.orange }} />
-              </Avatar>
-            )
+            avatar = <WarningIcon style={{ fill: theme.colors.orange }} />
             cardHeaderStyle.backgroundColor = theme.colors.yellow
           }
 
           return (
-            <Card
+            <ExpansionPanel
               key={section.title}
-              expanded={sectionIsExpanded && sectionCanExpandOrCollapse}
-              expandable={sectionCanExpandOrCollapse}
-              onExpandChange={(newExpandedState) =>
-                this.onExpandChange(sectionIndex, newExpandedState)
-              }
-              style={{
-                marginTop: 1
-              }}
+              disabled={!sectionCanExpandOrCollapse}
+              expanded={this.state.expandedSection === sectionIndex}
+              onChange={this.handlePanelChange(sectionIndex)}
             >
-              <CardHeader
-                title={section.title}
-                titleStyle={{
-                  width: '100%'
-                }}
-                style={cardHeaderStyle}
-                actAsExpander={!sectionIsSaving && sectionCanExpandOrCollapse}
-                showExpandableButton={!sectionIsSaving && sectionCanExpandOrCollapse}
-                avatar={avatar}
-              />
-              <CardContent
-                expandable
-              >
-                 {this.renderCampaignFormSection(section, sectionIsSaving)}
-              </CardContent>
-            </Card>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                {avatar}
+                <Typography>{section.title}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                  <CardContent>
+                    {this.renderCampaignFormSection(section, sectionIsSaving)}
+                  </CardContent>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
           )
         })}
       </div>
@@ -599,7 +598,7 @@ const campaignInfoFragment = `
 `
 
 const queries = {
-  getCampaignData: {
+  campaignData: {
     gql: gql`
       query getCampaign($campaignId: String!) {
         campaign(id: $campaignId) {
@@ -608,11 +607,11 @@ const queries = {
       }
     `,
     options: (props) => ({
-      variables: { campaignId: props.params.campaignId },
+      variables: { campaignId: props.match.params.campaignId },
       pollInterval: 60000
     })
   },
-  getPendingJobsData: {
+  pendingJobsData: {
     gql: gql`
       query getCampaignJobs($campaignId: String!) {
         campaign(id: $campaignId) {
@@ -628,7 +627,7 @@ const queries = {
       }
     `,
     options: (props) => ({
-      variables: { campaignId: props.params.campaignId },
+      variables: { campaignId: props.match.params.campaignId },
       pollInterval: 60000
     })
   },
@@ -647,7 +646,7 @@ const queries = {
       }
     `,
     options: (props) => ({
-      variables: { organizationId: props.params.organizationId },
+      variables: { organizationId: props.match.params.organizationId },
       pollInterval: 20000
     })
   },
@@ -662,7 +661,7 @@ const queries = {
       }
     `,
     options: (props) => ({
-      variables: { organizationId: props.params.organizationId },
+      variables: { organizationId: props.match.params.organizationId },
       forceFetch: true
     })
   }
@@ -708,4 +707,7 @@ const mutations = {
   }
 }
 
-export default newLoadData({ queries, mutations })(AdminCampaignEdit)
+export default compose(
+  newLoadData({ queries, mutations }),
+  withCurrentUser
+)(AdminCampaignEdit)

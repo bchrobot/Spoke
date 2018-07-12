@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
+import muiTheme from '../styles/mui-theme'
 import { StyleSheet } from 'aphrodite'
 import errorCatcher from './error-catcher'
 import makeRoutes from '../routes'
@@ -21,14 +23,16 @@ window.AuthService = {
 StyleSheet.rehydrate(window.RENDERED_CLASS_NAMES)
 
 ReactDOM.render(
-  <ApolloProvider client={ApolloClientSingleton}>
+  <MuiThemeProvider theme={muiTheme}>
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <App>
-        <BrowserRouter>
-          {makeRoutes()}
-        </BrowserRouter>
-      </App>
+      <ApolloProvider client={ApolloClientSingleton}>
+        <App>
+          <BrowserRouter>
+            {makeRoutes()}
+          </BrowserRouter>
+        </App>
+      </ApolloProvider>
     </MuiPickersUtilsProvider>
-  </ApolloProvider>,
+  </MuiThemeProvider>,
   document.getElementById('mount')
 )

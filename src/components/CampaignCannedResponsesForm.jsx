@@ -75,11 +75,17 @@ export default class CampaignCannedResponsesForm extends React.Component {
     }
     return (
       <Button
-        secondary
-        label='Add new canned response'
-        icon={<CreateIcon />}
+        variant='contained'
+        size='small'
+        color='secondary'
+        // className={classes.button}
         onClick={() => this.setState({ showForm: true })}
-      />
+      >
+        <CreateIcon
+          // className={classNames(classes.leftIcon, classes.iconSmall)}
+        />
+        Add new canned response
+      </Button>
     )
   }
 

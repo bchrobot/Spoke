@@ -8,6 +8,8 @@ import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
 import CheckIcon from '@material-ui/icons/Check'
 import WarningIcon from '@material-ui/icons/Warning'
 import ErrorIcon from '@material-ui/icons/Error'
@@ -17,7 +19,7 @@ import theme from '../styles/theme'
 import GSForm from '../components/forms/GSForm'
 import CampaignFormSectionHeading from './CampaignFormSectionHeading'
 
-const checkIcon = <CheckIcon style={{ fill: theme.colors.darkGreen }} />
+const checkIcon = <CheckIcon style={{ fill: theme.colors.green }} />
 const warningIcon = <WarningIcon style={{ fill: theme.colors.orange }} />
 const errorIcon = <ErrorIcon style={{ fill: theme.colors.red }} />
 
@@ -124,23 +126,29 @@ export default class CampaignContactsForm extends React.Component {
       return ''
     }
     return (
-      <List>
-        <ListSubheader>Uploaded</ListSubheader>
-        <ListItem
-          primaryText={`${contactsCount} contacts`}
-          leftIcon={checkIcon}
-          leftIconColor={theme.colors.green}
-        />
-        <ListItem
-          primaryText={`${customFields.length} custom fields`}
-          leftIcon={checkIcon}
-          nestedItems={customFields.map((field) => (
+      <List subheader={<ListSubheader component='div'>Uploaded</ListSubheader>}>
+        <ListItem>
+          <ListItemIcon>
+            {checkIcon}
+          </ListItemIcon>
+          <ListItemText primary={`${contactsCount} contacts`} />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            {checkIcon}
+          </ListItemIcon>
+          <ListItemText primary={`${customFields.length} custom fields`} />
+        </ListItem>
+        <List component='div' disablePadding>
+          {customFields.map((field) => (
             <ListItem
+              key={field}
               innerDivStyle={innerStyles.nestedItem}
-              primaryText={field}
-            />
+            >
+              <ListItemText primary={field} />
+            </ListItem>
           ))}
-        />
+        </List>
       </List>
     )
   }

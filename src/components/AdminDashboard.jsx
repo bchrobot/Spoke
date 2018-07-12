@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { hasRole } from '../lib'
 import LoadingIndicator from '../components/LoadingIndicator'
+import { CurrentUserProvider } from './lib/CurrentUserContext'
 import TopNav from './TopNav'
 import AdminNavigation from '../containers/AdminNavigation'
 import theme from '../styles/theme'
@@ -72,9 +73,6 @@ class AdminDashboard extends React.Component {
           const { params } = match
           const { roles } = data.currentUser
 
-          // HACK: Setting params.adminPerms helps us hide non-supervolunteer functionality
-          params.adminPerms = hasRole('ADMIN', roles || [])
-
           const sections = [{
             name: 'Campaigns',
             path: 'campaigns',
@@ -108,8 +106,14 @@ class AdminDashboard extends React.Component {
                   this.urlFromPath(currentSection.path) :
                   null
 
+          // HACK: Setting adminPerms helps us hide non-supervolunteer functionality
+          const userContext = {
+            user: data.currentUser,
+            adminPerms: hasRole('ADMIN', data.currentUser.roles || [])
+          }
+
           return (
-            <div>
+            <CurrentUserProvider value={userContext}>
               <TopNav title={title} backToURL={backToURL} orgId={params.organizationId} />
               <div className={css(styles.container)}>
                 {this.renderNavigation(sections.filter((s) => hasRole(s.role, roles)))}
@@ -117,7 +121,7 @@ class AdminDashboard extends React.Component {
                   {children}
                 </div>
               </div>
-            </div>
+            </CurrentUserProvider>
           )
         }}
       </Query>

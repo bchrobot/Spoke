@@ -28,7 +28,7 @@ const AdminCampaignRoutes = ({ match }) => {
   return (
     <Switch>
       <Route path={campaignPath} exact component={AdminCampaignStats} />
-      {/* <Route path={`${campaignPath}/edit`} component={AdminCampaignEdit} /> */}
+      <Route path={`${campaignPath}/edit`} component={AdminCampaignEdit} />
       {/* <Route path={`${campaignPath}/send-replies`} component={AdminReplySender} /> */}
       <Redirect path='*' to={match.url} />
     </Switch>
