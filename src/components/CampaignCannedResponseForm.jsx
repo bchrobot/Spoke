@@ -45,7 +45,7 @@ class CannedResponseForm extends React.Component {
             name='text'
             type='script'
             label='Script'
-            multiLine
+            multiline
             fullWidth
           />
           <div className={css(styles.buttonRow)}>

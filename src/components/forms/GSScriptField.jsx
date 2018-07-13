@@ -1,4 +1,5 @@
 import React from 'react'
+import omit from 'lodash/omit'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -8,12 +9,6 @@ import TextField from '@material-ui/core/TextField'
 import { allScriptFields } from '../../lib/scripts'
 import ScriptEditor from '../ScriptEditor'
 import GSFormField from './GSFormField'
-
-const styles = {
-  dialog: {
-    zIndex: 10001
-  }
-}
 
 export default class GSScriptField extends GSFormField {
   constructor(props) {
@@ -52,7 +47,6 @@ export default class GSScriptField extends GSFormField {
 
     return (
       <Dialog
-        style={styles.dialog}
         modal
         open={open}
         onRequestClose={this.handleCloseDialog}
@@ -84,19 +78,14 @@ export default class GSScriptField extends GSFormField {
   }
 
   render() {
+    const cleanProps = omit(this.props, ['customFields'])
     return (
       <div>
         <TextField
-          multiLine
+          multiline
           onFocus={this.handleOpenDialog}
-          onClick={(event) => {
-            event.stopPropagation()
-          }}
-          floatingLabelText={this.floatingLabelText()}
-          floatingLabelStyle={{
-            zIndex: 0
-          }}
-          {...this.props}
+          onClick={event => event.stopPropagation()}
+          {...cleanProps}
         />
         {this.renderDialog()}
       </div>

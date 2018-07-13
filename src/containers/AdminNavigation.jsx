@@ -21,7 +21,10 @@ class AdminNavigation extends React.Component {
           url: this.urlFromPath(section.path)
         }))}
         switchListItem={
-          <ListItem onClick={() => this.props.history.push(`/app/${organizationId}/todos`)}>
+          <ListItem
+            button
+            onClick={() => this.props.history.push(`/app/${organizationId}/todos`)}
+          >
             <ListItemText primary='Switch to texter' />
           </ListItem>
         }

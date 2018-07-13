@@ -10,18 +10,21 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import Collapse from '@material-ui/core/Collapse'
 import CheckIcon from '@material-ui/icons/Check'
 import WarningIcon from '@material-ui/icons/Warning'
 import ErrorIcon from '@material-ui/icons/Error'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
 import { parseCSV } from '../lib'
 import theme from '../styles/theme'
 import GSForm from '../components/forms/GSForm'
 import CampaignFormSectionHeading from './CampaignFormSectionHeading'
 
-const checkIcon = <CheckIcon style={{ fill: theme.colors.green }} />
-const warningIcon = <WarningIcon style={{ fill: theme.colors.orange }} />
-const errorIcon = <ErrorIcon style={{ fill: theme.colors.red }} />
+const StyledCheckIcon = (props) => <CheckIcon {...props} style={{ fill: theme.colors.green }} />
+const StyledWarningIcon = (props) => <WarningIcon {...props} style={{ fill: theme.colors.orange }} />
+const StyledErrorIcon = (props) => <ErrorIcon {...props} style={{ fill: theme.colors.red }} />
 
 const innerStyles = {
   button: {
@@ -29,6 +32,9 @@ const innerStyles = {
     fontSize: '10px'
   },
   nestedItem: {
+    marginLeft: '12px'
+  },
+  nestedItemText: {
     fontSize: '12px'
   }
 }
@@ -55,7 +61,8 @@ export default class CampaignContactsForm extends React.Component {
   state = {
     uploading: false,
     validationStats: null,
-    contactUploadError: null
+    contactUploadError: null,
+    customFieldsOpen: false
   }
 
   validateSql = (sql) => {
@@ -125,30 +132,37 @@ export default class CampaignContactsForm extends React.Component {
     if (contactsCount === 0) {
       return ''
     }
+
     return (
-      <List subheader={<ListSubheader component='div'>Uploaded</ListSubheader>}>
+      <List>
+        <ListSubheader component='div'>Uploaded</ListSubheader>
         <ListItem>
-          <ListItemIcon>
-            {checkIcon}
-          </ListItemIcon>
+          {/* ListItemIcon is throwing a fit here for some reason */}
+          {/* <ListItemIcon>
+            <StyledCheckIcon />
+          </ListItemIcon> */}
           <ListItemText primary={`${contactsCount} contacts`} />
         </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            {checkIcon}
-          </ListItemIcon>
+        <ListItem
+          button
+          onClick={event => this.setState({ customFieldsOpen: !this.state.customFieldsOpen })}
+        >
+          {/* ListItemIcon is throwing a fit here for some reason */}
+          {/* <ListItemIcon>
+            <StyledCheckIcon />
+          </ListItemIcon> */}
           <ListItemText primary={`${customFields.length} custom fields`} />
+          {this.state.open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <List component='div' disablePadding>
-          {customFields.map((field) => (
-            <ListItem
-              key={field}
-              innerDivStyle={innerStyles.nestedItem}
-            >
-              <ListItemText primary={field} />
-            </ListItem>
-          ))}
-        </List>
+        <Collapse in={this.state.customFieldsOpen} timeout='auto' unmountOnExit>
+          <List component='div' disablePadding>
+            {customFields.map((field) => (
+              <ListItem key={field} style={innerStyles.nestedItem}>
+                <ListItemText primary={<span style={innerStyles.nestedItemText}>{field}</span>} />
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
       </List>
     )
   }
@@ -173,11 +187,12 @@ export default class CampaignContactsForm extends React.Component {
       <List>
         <Divider />
         {stats.map((stat) => (
-          <ListItem
-            leftIcon={warningIcon}
-            innerDivStyle={innerStyles.nestedItem}
-            primaryText={stat}
-          />
+          <ListItem innerDivStyle={innerStyles.nestedItem}>
+            <ListItemIcon>
+              <StyledWarningIcon />
+            </ListItemIcon>
+            <ListItemText primary={stat} />
+          </ListItem>
         ))}
       </List>
     )
@@ -189,12 +204,12 @@ export default class CampaignContactsForm extends React.Component {
       <div>
         <Button
           variant='contained'
-          style={innerStyles.button}
-          label={uploading ? 'Uploading...' : 'Upload contacts'}
-          labelPosition='before'
+          color='primary'
           disabled={uploading}
           onClick={() => document.querySelector('#contact-upload').click()}
-        />
+        >
+          {uploading ? 'Uploading...' : 'Upload contacts'}
+        </Button>
         <input
           id='contact-upload'
           type='file'
@@ -261,10 +276,12 @@ export default class CampaignContactsForm extends React.Component {
               />
               {contactSqlError ? (
                 <List>
-                  <ListItem
-                    primaryText={contactSqlError}
-                    leftIcon={errorIcon}
-                  />
+                  <ListItem>
+                    <ListItemIcon>
+                      <StyledErrorIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={contactSqlError} />
+                  </ListItem>
                 </List>
                ) : ''}
 
@@ -274,17 +291,20 @@ export default class CampaignContactsForm extends React.Component {
           {this.renderValidationStats()}
           {contactUploadError ? (
             <List>
-              <ListItem
-                primaryText={contactUploadError}
-                leftIcon={errorIcon}
-              />
+              <ListItem>
+                <ListItemIcon>
+                  <StyledErrorIcon />
+                </ListItemIcon>
+                <ListItemText primary={contactUploadError} />
+              </ListItem>
             </List>
           ) : ''}
           <Form.Button
             type='submit'
             disabled={this.props.saveDisabled}
-            label={this.props.saveLabel}
-          />
+          >
+            {this.props.saveLabel}
+          </Form.Button>
         </GSForm>
       </div>
     )

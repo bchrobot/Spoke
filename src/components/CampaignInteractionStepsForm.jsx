@@ -122,7 +122,7 @@ export default class CampaignInteractionStepsForm extends React.Component {
               name='answerOption'
               label='Answer'
               fullWidth
-              hintText='Answer to the previous question'
+              placeholder='Answer to the previous question'
             /> : ''}
             {interactionStep.parentInteractionId ? <DeleteIcon style={styles.pullRight} onClick={this.deleteStep(interactionStep.id).bind(this)} /> : ''}
             {interactionStep.parentInteractionId && this.props.availableActions && this.props.availableActions.length ?
@@ -157,14 +157,14 @@ export default class CampaignInteractionStepsForm extends React.Component {
               fullWidth
               customFields={this.props.customFields}
               label='Script'
-              multiLine
-              hintText="This is what your texters will send to your contacts. E.g. Hi, {firstName}. It's {texterFirstName} here."
+              multiline
+              placeholder="This is what your texters will send to your contacts. E.g. Hi, {firstName}. It's {texterFirstName} here."
             />
             <Form.Field
               name='questionText'
               label='Question'
               fullWidth
-              hintText='A question for texters to answer. E.g. Can this person attend the event?'
+              placeholder='A question for texters to answer. E.g. Can this person attend the event?'
             />
 
           </GSForm>

@@ -95,7 +95,6 @@ class IncomingMessageFilter extends Component {
             <Select
               multiple
               value={this.state.messageFilter}
-              hintText={''}
               onChange={this.onMessageFilterSelectChanged}
               inputProps={{
                 name: 'message-status',

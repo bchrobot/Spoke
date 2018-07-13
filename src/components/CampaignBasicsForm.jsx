@@ -3,7 +3,6 @@ import React from 'react'
 import Form from 'react-formal'
 import moment from 'moment'
 import yup from 'yup'
-import ColorPicker from 'material-ui-color-picker'
 
 import CampaignFormSectionHeading from './CampaignFormSectionHeading'
 import GSForm from './forms/GSForm'
@@ -12,7 +11,7 @@ const FormSchema = {
   title: yup.string(),
   description: yup.string(),
   dueBy: yup.mixed(),
-  logoImageUrl: yup.string().url().transform(value => !value ? null : value).nullable(),
+  logoImageUrl: yup.string().url().transform(value => !value ? '' : value).nullable(),
   primaryColor: yup.string().nullable(),
   introHtml: yup.string().nullable()
 }
@@ -21,9 +20,9 @@ const EnsureCompletedFormSchema = {
   title: yup.string().required(),
   description: yup.string().required(),
   dueBy: yup.mixed().required(),
-  logoImageUrl: yup.string().transform(value => !value ? null : value).url().nullable(),
-  primaryColor: yup.string().transform(value => !value ? null : value).nullable(),
-  introHtml: yup.string().transform(value => !value ? null : value).nullable()
+  logoImageUrl: yup.string().transform(value => !value ? '' : value).url().nullable(),
+  primaryColor: yup.string().transform(value => !value ? '' : value).nullable(),
+  introHtml: yup.string().transform(value => !value ? '' : value).nullable()
 }
 
 export default class CampaignBasicsForm extends React.Component {
@@ -78,7 +77,7 @@ export default class CampaignBasicsForm extends React.Component {
           <Form.Field
             name='introHtml'
             label='Intro HTML'
-            multiLine
+            multiline
             fullWidth
           />
           <Form.Field
@@ -87,18 +86,18 @@ export default class CampaignBasicsForm extends React.Component {
             placeholder='https://www.mysite.com/images/logo.png'
             fullWidth
           />
-          <label>Primary color</label>
           <Form.Field
             name='primaryColor'
             label='Primary color'
             defaultValue={this.props.formValues.primaryColor || '#ffffff'}
-            type={ColorPicker}
+            type='color'
           />
           <Form.Button
             type='submit'
-            label={this.props.saveLabel}
             disabled={this.props.saveDisabled}
-          />
+          >
+            {this.props.saveLabel}
+          </Form.Button>
         </GSForm>
       </div>
     )

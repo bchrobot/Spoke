@@ -75,16 +75,16 @@ class AssignmentTexterSurveyDropdown extends Component {
 
     return (
       <div>
-        <SelectField
+        <Select
           style={isCurrentStep ? styles.currentStepSelect : styles.previousStepSelect}
           onChange={this.handleAnswerChange}
           name={question.id}
           value={responseValue}
           floatingLabelText={question.text}
-          hintText='Choose answer'
+          label='Choose answer'
         >
           {this.renderAnswers()}
-        </SelectField>
+        </Select>
       </div>
     )
   }

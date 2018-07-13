@@ -54,7 +54,8 @@ export default class GSForm extends React.Component {
         if (error) {
           error = error[0] ? error[0].message.replace(name, child.props.label) : null
           clonedElement = React.cloneElement(child, {
-            errorText: error
+            error: true,
+            helperText: error
           })
         }
         return React.cloneElement(clonedElement, {

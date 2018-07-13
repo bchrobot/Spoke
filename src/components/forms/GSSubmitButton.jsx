@@ -29,7 +29,7 @@ const GSSubmitButton = (props) => {
     <div style={styles.button} {...props}>
       <Button
         variant='contained'
-        primary
+        color='primary'
         type='submit'
         value='submit'
         {...props}

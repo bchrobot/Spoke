@@ -76,7 +76,7 @@ class AdminReplySender extends React.Component {
             <Form.Field
               name='message'
               label='Reply'
-              hintText='Reply'
+              placeholder='Reply'
               fullWidth
             />
             <Form.Button

@@ -8,6 +8,7 @@ import GSTextField from './forms/GSTextField'
 import GSDateField from './forms/GSDateField'
 import GSScriptField from './forms/GSScriptField'
 import GSSelectField from './forms/GSSelectField'
+import GSColorField from './forms/GSColorField'
 
 Form.addInputTypes({
   string: GSTextField,
@@ -15,7 +16,8 @@ Form.addInputTypes({
   date: GSDateField,
   email: GSTextField,
   script: GSScriptField,
-  select: GSSelectField
+  select: GSSelectField,
+  color: GSColorField
 })
 
 const styles = StyleSheet.create({

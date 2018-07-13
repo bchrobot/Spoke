@@ -95,6 +95,7 @@ class CampaignList extends React.Component {
     return (
       <ListItem
         key={campaign.id}
+        button
         onClick={() => (!isStarted ?
           this.props.history.push(`${campaignUrl}/edit`) :
           this.props.history.push(campaignUrl))}

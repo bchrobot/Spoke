@@ -8,6 +8,8 @@ import CardContent from '@material-ui/core/CardContent'
 import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider'
 import Select from '@material-ui/core/Select'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
 
 const styles = {
   root: {
@@ -104,19 +106,22 @@ class AssignmentTexterSurveys extends Component {
     const { question } = step
 
     return question.text ? (
-      <div>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor={question.id}>Choose answer</InputLabel>
         <Select
           style={isCurrentStep ? styles.currentStepSelect : styles.previousStepSelect}
           onChange={(event, index, value) => this.handleSelectChange(step, index, value)}
-          name={question.id}
           fullWidth
           value={responseValue}
           floatingLabelText={question.text}
-          hintText='Choose answer'
+          inputProps={{
+            id: question.id,
+            name: question.id
+          }}
         >
           {this.renderAnswers(step)}
         </Select>
-      </div>
+      </FormControl>
     ) : ''
   }
 

@@ -366,7 +366,7 @@ export default class CampaignTextersForm extends React.Component {
           <div className={css(styles.input)}>
             <Form.Field
               name={`texters[${index}].assignment.needsMessageCount`}
-              hintText='Contacts'
+              label='Contacts'
               fullWidth
               onFocus={() => this.setState({ focusedTexter: texter.id })}
               onBlur={() => this.setState({
@@ -386,7 +386,7 @@ export default class CampaignTextersForm extends React.Component {
            <div className={css(styles.input)}>
             <Form.Field
               name={`texters[${index}].assignment.maxContacts`}
-              hintText='Max'
+              label='Max'
               fullWidth
               onFocus={() => this.setState({ focusedTexter: texter.id })}
               onBlur={() => this.setState({
@@ -467,9 +467,10 @@ export default class CampaignTextersForm extends React.Component {
             <div>
               <Button
                 variant='contained'
-                label='Add All'
                 onClick={(() => this.addAllTexters())}
-              />
+              >
+                Add All
+              </Button>
             </div>
           </div>
           <div className={css(styles.sliderContainer)}>

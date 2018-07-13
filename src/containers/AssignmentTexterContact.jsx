@@ -753,7 +753,7 @@ export class AssignmentTexterContact extends React.Component {
               name='optOutMessageText'
               fullWidth
               autoFocus
-              multiLine
+              multiline
             />
             <div className={css(styles.dialogActions)}>
               <Button
@@ -805,7 +805,7 @@ export class AssignmentTexterContact extends React.Component {
             className={css(styles.textField)}
             name='messageText'
             label='Your message'
-            multiLine
+            multiline
             fullWidth
             rowsMax={6}
           />

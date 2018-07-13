@@ -1,10 +1,11 @@
 import React from 'react'
 import moment from 'moment'
+import omit from 'lodash/omit'
 import DatePicker from 'material-ui-pickers/DatePicker'
 
 import GSFormField from './GSFormField'
 
-export default class GCDateField extends GSFormField {
+export default class GSDateField extends GSFormField {
   render() {
     const momentDate = moment(this.props.value)
     let value = {}
@@ -16,16 +17,11 @@ export default class GCDateField extends GSFormField {
       oldDate = moment(fakeDate).toObject()
       value = { value: fakeDate }
     }
-    const propCopy = {
-      ...this.props
-    }
-    delete propCopy.value
-    delete propCopy.type
+
+    const cleanProps = omit(this.props, ['value', 'type', 'utcOffset', 'onChange'])
 
     return (
       <DatePicker
-        {...propCopy}
-        floatingLabelText={this.floatingLabelText()}
         onChange={(_, date) => {
           let newDate = moment(date)
           if (!newDate.isValid()) {
@@ -43,7 +39,7 @@ export default class GCDateField extends GSFormField {
           }
         }}
         {...value}
-        errorText={this.props.errorText}
+        {...cleanProps}
       />
     )
   }

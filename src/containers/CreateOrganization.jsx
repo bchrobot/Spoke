@@ -79,7 +79,7 @@ class CreateOrganization extends React.Component {
                 id ='organization'
                 name='name'
                 label='Your organization'
-                hintText='Bartlet Campaign'
+                placeholder='Bartlet Campaign'
                 fullWidth
               />
               <Form.Button

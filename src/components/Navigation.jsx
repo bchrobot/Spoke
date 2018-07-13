@@ -23,6 +23,7 @@ const Navigation = function Navigation(props) {
         {sections.map((section) => (
           <ListItem
             key={section.name}
+            button
             onClick={() => props.history.push(section.url)}
           >
             <ListItemText primary={section.name} />

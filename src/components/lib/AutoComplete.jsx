@@ -175,12 +175,12 @@ class IntegrationReactSelect extends React.Component {
   }
 
   render() {
-    const { classes, placeholder, options, fullWidth, handleChange } = this.props;
+    const { classes, placeholder, options, fullWidth, handleChange } = this.props
 
     return (
       <div className={classes.root}>
         <Input
-          fullWidth={fullWidth}
+          fullWidth={fullWidth || false}
           inputComponent={SelectWrapped}
           value={this.state.selection}
           onChange={handleChange}
@@ -203,7 +203,7 @@ IntegrationReactSelect.propTypes = {
   classes: types.object.isRequired,
   placeholder: types.string,
   options: types.array.isRequired,
-  fullWidth: types.boolean,
+  fullWidth: types.bool,
   handleChange: types.func
 };
 

@@ -109,7 +109,7 @@
     "knex": "^0.13.0",
     "lodash": "^4.13.1",
     "mailgun-js": "^0.16.0",
-    "material-ui-color-picker": "^1.0.1",
+    "material-ui-color-picker": "github:bchrobot/material-ui-color-picker#material-ui-v1",
     "material-ui-datatables": "^0.18.2",
     "material-ui-pickers": "^1.0.0-rc.11",
     "minilog": "^3.0.1",

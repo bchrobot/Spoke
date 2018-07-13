@@ -55,10 +55,7 @@ class UserEdit extends React.Component {
         <Form.Field label='Last name' name='lastName' />
         <Form.Field label='Email' name='email' />
         <Form.Field label='Cell Number' name='cell' />
-        <Form.Button
-          type='submit'
-          label={this.props.saveLabel || 'Save'}
-        />
+        <Form.Button type='submit'>{this.props.saveLabel || 'Save'}</Form.Button>
       </GSForm>
     )
   }

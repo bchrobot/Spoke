@@ -18,15 +18,13 @@ import DoneIcon from '@material-ui/icons/Done'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { newLoadData } from '../containers/hoc/load-data'
+import { withCurrentUser } from '../components/lib/CurrentUserContext'
 import CampaignBasicsForm from '../components/CampaignBasicsForm'
 import CampaignContactsForm from '../components/CampaignContactsForm'
 import CampaignTextersForm from '../components/CampaignTextersForm'
 import CampaignInteractionStepsForm from '../components/CampaignInteractionStepsForm'
 import CampaignCannedResponsesForm from '../components/CampaignCannedResponsesForm'
 import theme from '../styles/theme'
-
-import { withCurrentUser } from '../components/lib/CurrentUserContext'
-import { ErrorBoundary } from '../components/lib/ErrorBoundary'
 
 class AdminCampaignEdit extends React.Component {
   constructor(props) {
@@ -354,17 +352,15 @@ class AdminCampaignEdit extends React.Component {
     const ContentComponent = section.content
     const formValues = this.getSectionState(section)
     return (
-      <ErrorBoundary>
-        <ContentComponent
-          onChange={this.handleChange}
-          formValues={formValues}
-          saveLabel={this.isNew() ? 'Save and goto next section' : 'Save'}
-          saveDisabled={shouldDisable}
-          ensureComplete={this.props.campaignData.campaign.isStarted}
-          onSubmit={this.handleSubmit}
-          {...section.extraProps}
-        />
-      </ErrorBoundary>
+      <ContentComponent
+        onChange={this.handleChange}
+        formValues={formValues}
+        saveLabel={this.isNew() ? 'Save and goto next section' : 'Save'}
+        saveDisabled={shouldDisable}
+        ensureComplete={this.props.campaignData.campaign.isStarted}
+        onSubmit={this.handleSubmit}
+        {...section.extraProps}
+      />
     )
   }
 
