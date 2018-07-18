@@ -529,7 +529,8 @@ class AdminCampaignEdit extends React.Component {
                 <Typography>{section.title}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                  <CardContent>
+                  {/* CardContent is not taking up 100% by itself for some reason  */}
+                  <CardContent style={{width: '100%'}}>
                     {this.renderCampaignFormSection(section, sectionIsSaving)}
                   </CardContent>
               </ExpansionPanelDetails>

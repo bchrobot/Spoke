@@ -518,9 +518,10 @@ export default class CampaignTextersForm extends React.Component {
           </div>
           <Form.Button
             type='submit'
-            label={this.props.saveLabel}
             disabled={this.props.saveDisabled}
-          />
+          >
+            {this.props.saveLabel}
+          </Form.Button>
         </GSForm>
       </div>
     )

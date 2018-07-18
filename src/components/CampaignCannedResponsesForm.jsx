@@ -6,6 +6,8 @@ import { StyleSheet, css } from 'aphrodite'
 import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -94,27 +96,24 @@ export default class CampaignCannedResponsesForm extends React.Component {
       <ListItem
         value={response.text}
         key={response.id}
-        primaryText={response.title}
-        secondaryText={response.text}
-        rightIconButton={(
-          <IconButton
-            onClick={() => {
-              const newVals = this.props.formValues.cannedResponses.map((responseToDelete) => {
-                if (responseToDelete.id === response.id) {
-                  return null
-                }
-                return responseToDelete
-              }).filter((ele) => ele !== null)
+      >
+        <ListItemText primary={response.title} secondary={response.text} />
+        <IconButton
+          onClick={() => {
+            const newVals = this.props.formValues.cannedResponses.map((responseToDelete) => {
+              if (responseToDelete.id === response.id) {
+                return null
+              }
+              return responseToDelete
+            }).filter((ele) => ele !== null)
 
-              this.props.onChange({
-                cannedResponses: newVals })
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        )}
-        secondaryTextLines={2}
-      />
+            this.props.onChange({
+              cannedResponses: newVals })
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </ListItem>
     ))
     return listItems
   }

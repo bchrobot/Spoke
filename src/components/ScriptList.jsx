@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -99,11 +100,10 @@ class ScriptList extends React.Component {
         value={script.text}
         onClick={() => onSelectCannedResponse(script)}
         key={script.id}
-        primaryText={script.title}
-        secondaryText={script.text}
-        rightIconButton={rightIconButton}
-        secondaryTextLines={2}
-      />
+      >
+        <ListItemText primary={script.title} secondary={script.text} />
+        {rightIconButton}
+      </ListItem>
     ))
 
 

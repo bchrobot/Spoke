@@ -174,10 +174,11 @@ export default class CampaignInteractionStepsForm extends React.Component {
         {interactionStep.questionText && interactionStep.script && (!interactionStep.parentInteractionId || interactionStep.answerOption) ? <div>
           <Button
             variant='contained'
-            label='+ Add a response'
             onClick={this.addStep(interactionStep.id).bind(this)}
             style={{ marginBottom: '10px' }}
-          />
+          >
+            {'+ Add a response'}
+          </Button>
         </div> : ''}
         {interactionStep.interactionSteps
           .filter((childStep) => !childStep.isDeleted)
