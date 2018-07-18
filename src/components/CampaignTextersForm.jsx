@@ -293,8 +293,8 @@ export default class CampaignTextersForm extends React.Component {
         onFocus={() => this.setState({ searchText: '' })}
         placeholder='Search for texters to assign'
         options={options}
-        handleChange={(value) => {
-          const newTexter = this.props.orgTexters.find((texter) => texter.id === value)
+        handleChange={(texterId) => {
+          const newTexter = this.props.orgTexters.find((texter) => texter.id === texterId)
           this.onChange({
             texters: [
               ...this.formValues().texters,
