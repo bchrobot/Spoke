@@ -77,7 +77,8 @@ export const resolvers = {
       'useDynamicAssignment',
       'introHtml',
       'primaryColor',
-      'logoImageUrl'
+      'logoImageUrl',
+      'createdAt'
     ], Campaign),
     organization: async (campaign, _, { loaders }) => (
       loaders.organization.load(campaign.organization_id)
