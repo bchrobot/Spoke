@@ -5,7 +5,6 @@ import theme from '../styles/theme'
 import { hasRole } from '../lib'
 import TopNav from './TopNav'
 import gql from 'graphql-tag'
-import { withRouter } from 'react-router'
 import loadData from '../containers/hoc/load-data'
 import AdminNavigation from '../containers/AdminNavigation'
 const styles = StyleSheet.create({
@@ -25,13 +24,17 @@ const styles = StyleSheet.create({
 })
 
 class AdminDashboard extends React.Component {
+  componentWillMount() {
+    this.props.onEnter()
+  }
+
   urlFromPath(path) {
-    const organizationId = this.props.params.organizationId
+    const organizationId = this.props.match.params.organizationId
     return `/admin/${organizationId}/${path}`
   }
 
   renderNavigation(sections) {
-    const organizationId = this.props.params.organizationId
+    const organizationId = this.props.match.params.organizationId
     if (!organizationId) {
       return ''
     }
@@ -46,7 +49,8 @@ class AdminDashboard extends React.Component {
   }
 
   render() {
-    const { location, children, params } = this.props
+    const { location, children, match } = this.props
+    const { params } = match
     const { roles } = this.props.data.currentUser
 
     // HACK: Setting params.adminPerms helps us hide non-supervolunteer functionality
@@ -100,8 +104,8 @@ class AdminDashboard extends React.Component {
 }
 
 AdminDashboard.propTypes = {
-  router: PropTypes.object,
-  params: PropTypes.object,
+  match: PropTypes.object,
+  onEnter: PropTypes.func,
   children: PropTypes.object,
   location: PropTypes.object
 }
@@ -120,4 +124,4 @@ const mapQueriesToProps = ({ ownProps }) => ({
   }
 })
 
-export default loadData(withRouter(AdminDashboard), { mapQueriesToProps })
+export default loadData(AdminDashboard, { mapQueriesToProps })
