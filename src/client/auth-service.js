@@ -10,6 +10,7 @@ export function logout() {
 
 export function login(nextUrl) {
   const lock = new window.Auth0Lock(window.AUTH0_CLIENT_ID, window.AUTH0_DOMAIN, {
+    container: 'login-wrapper',
     auth: {
       redirect: true,
       redirectUrl: `${window.BASE_URL}/login-callback`,
