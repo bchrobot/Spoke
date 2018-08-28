@@ -24,7 +24,7 @@ class Login extends React.Component {
           <img src={imageSource} />
           <h3>Thanks for helping text for Zephyr!</h3>
           <ol>
-            <li><a href="https://docs.google.com/document/d/1Id8Ol0vURplgAwVxYYmGyFPgGma3Sb83oFbVzd-gNd0/edit?usp=sharing" target="_blank">Review the How-To Guide Here</a></li>
+            <li><a href="https://docs.google.com/document/d/120NEPXpGvPSxjxVQdOdN1kwzXc0JlJNbEaBd0otUeu8/edit" target="_blank">Review the How-To Guide Here</a></li>
             <li>
               Join our texting group chat to ask questions and request new assignments
               <ol>
