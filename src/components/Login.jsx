@@ -29,7 +29,8 @@ class Login extends React.Component {
               Join our texting group chat to ask questions and request new assignments
               <ol>
                 <li>Download WhatsApp for Mobile and Desktop and make an account</li>
-                <li>Join our WhatsApp chat using the link <a href="http://bit.ly/text4zephyrchat" target="_blank">http://bit.ly/text4zephyrchat</a></li>
+                <li>Texting Support and Questions: <a href="http://bit.ly/ZephyrQandA" target="_blank">http://bit.ly/ZephyrQandA</a></li>
+                <li>Texting Assignments: <a href="http://bit.ly/ZephyrAsk4Txts" target="_blank">http://bit.ly/ZephyrAsk4Txts</a></li>
               </ol>
             </li>
           </ol>
