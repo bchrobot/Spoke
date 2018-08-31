@@ -49,6 +49,9 @@ const campaignInfoFragment = `
     answerActions
     parentInteractionId
     isDeleted
+    source
+    externalQuestion
+    externalResponse
   }
   cannedResponses {
     id
@@ -214,6 +217,7 @@ class AdminCampaignEdit extends React.Component {
         }))
       }
       if (newCampaign.hasOwnProperty('interactionSteps')) {
+        console.log('AdminCampaignEdit handleSave received interaction steps:', newCampaign.interactionSteps)
         newCampaign.interactionSteps = Object.assign({}, newCampaign.interactionSteps)
       }
       await this
@@ -321,7 +325,8 @@ class AdminCampaignEdit extends React.Component {
       expandableBySuperVolunteers: false,
       extraProps: {
         customFields: this.props.campaignData.campaign.customFields,
-        availableActions: this.props.availableActionsData.availableActions
+        availableActions: this.props.availableActionsData.availableActions,
+        organizationId: this.props.organizationData.organization.id
       }
     }, {
       title: 'Canned Responses',
@@ -491,7 +496,7 @@ class AdminCampaignEdit extends React.Component {
         {this.renderHeader()}
         {sections.map((section, sectionIndex) => {
           const sectionIsDone = this.checkSectionCompleted(section)
-            && this.checkSectionSaved(section)
+          && this.checkSectionSaved(section)
           const sectionIsExpanded = sectionIndex === expandedSection
           let avatar = null
           const cardHeaderStyle = {
@@ -505,7 +510,7 @@ class AdminCampaignEdit extends React.Component {
           const { sectionIsSaving, savePercent } = this.sectionSaveStatus(section)
           const sectionCanExpandOrCollapse = (
             (section.expandAfterCampaignStarts
-             || !this.props.campaignData.campaign.isStarted)
+            || !this.props.campaignData.campaign.isStarted)
             && (adminPerms || section.expandableBySuperVolunteers))
 
           if (sectionIsSaving) {
@@ -520,7 +525,7 @@ class AdminCampaignEdit extends React.Component {
                 height: 20,
                 width: 20
               }}
-            />)
+                      />)
             cardHeaderStyle.background = theme.colors.lightGray
             cardHeaderStyle.width = `${savePercent}%`
           } else if (sectionIsExpanded && sectionCanExpandOrCollapse) {

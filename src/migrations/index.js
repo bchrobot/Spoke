@@ -125,7 +125,8 @@ const migrations = [
       console.log('added log table')
     }
   },
-  { auto: true, // 11
+  {
+    auto: true, // 11
     date: '2018-07-16',
     migrate: async function() {
       await r.knex.schema.alterTable('message', (table) => {
@@ -133,6 +134,31 @@ const migrations = [
           .index().references('id').inTable('user')
       })
       console.log('added user_id column to message table')
+    }
+  },
+  {
+    auto: true, // 12
+    date: '2018-06-25',
+    migrate: async function migrate() {
+      console.log('adding columns to interaction_step table: source, external_question_id, external_response_id')
+      await r.knex.schema.alterTable('interaction_step', t => {
+        t.text('source')
+        t.text('external_question_id')
+        t.text('external_response_id')
+      })
+      console.log('added columns successfully')
+    }
+  },
+  {
+    auto: true, // 13, to re-do column names: NOTE this deletes and re-adds the columns
+    date: '2018-07-08',
+    migrate: async function migrate() {
+      console.log('removing and re-adding columns with new names')
+      await r.knex.schema.alterTable('interaction_step', t => {
+        t.dropColumns('external_question_id', 'external_response_id')
+        t.text('external_question')
+        t.text('external_response')
+      })
     }
   }
   /* migration template

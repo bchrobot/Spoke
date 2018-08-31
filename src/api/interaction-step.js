@@ -9,6 +9,8 @@ export const schema = `
     isDeleted: Boolean
     answerActions: String
     questionResponse(campaignContactId: String): QuestionResponse
+    source: String
+    externalQuestion: String
+    externalResponse: String
   }
 `
-
