@@ -1,8 +1,9 @@
 import { mapFieldsToModel } from './lib/utils'
 import { r, Organization } from '../models'
-import { accessRequired } from './errors'
+import { accessRequired, hasOsdiConfigured } from './errors'
 import { buildCampaignQuery } from './campaign'
 import { buildUserOrganizationQuery } from './user'
+import axios from 'axios'
 
 export const resolvers = {
   Organization: {
@@ -19,6 +20,23 @@ export const resolvers = {
       )
       query = query.orderBy('due_by', 'desc')
       return query
+    },
+    osdiQuestions: async (organization, args, context, info) => {
+      // TODO pagination!
+      await hasOsdiConfigured(organization)
+      const { osdiApiUrl, osdiApiToken } = JSON.parse(organization.features)
+      const client = axios.create({
+        baseURL: osdiApiUrl,
+        headers: { 'OSDI-Api-Token': osdiApiToken }
+      })
+      const { data } = await client.get('/questions')
+      const questions = []
+      data._embedded['osdi:questions'].forEach((q, i) => {
+        const s = JSON.stringify(q)
+        questions.push(s)
+      })
+      return questions
+      // TODO figure out how to do async/await error handling
     },
     uuid: async (organization, _, { user }) => {
       await accessRequired(user, organization.id, 'SUPERVOLUNTEER')
@@ -39,6 +57,28 @@ export const resolvers = {
     threeClickEnabled: (organization) => organization.features.indexOf('threeClick') !== -1,
     textingHoursEnforced: (organization) => organization.texting_hours_enforced,
     textingHoursStart: (organization) => organization.texting_hours_start,
-    textingHoursEnd: (organization) => organization.texting_hours_end
+    textingHoursEnd: (organization) => organization.texting_hours_end,
+    osdiEnabled: async (organization, _, { user }) => {
+      await accessRequired(user, organization.id, 'ADMIN') // TODO should other users be able to
+      return tryFeatureParse(organization, 'osdiEnabled', false)
+    },
+    osdiApiUrl: async (organization, _, { user }) => {
+      await accessRequired(user, organization.id, 'ADMIN')
+      return tryFeatureParse(organization, 'osdiApiUrl', '')
+    },
+    osdiApiToken: async (organization, _, { user }) => {
+      await accessRequired(user, organization.id, 'ADMIN')
+      return tryFeatureParse(organization, 'osdiApiToken', '')
+    }
+  }
+}
+
+function tryFeatureParse(organization, key, backup) {
+  try {
+    const possible = JSON.parse(organization.features)[key]
+    const result = possible !== undefined ? possible : backup
+    return result
+  } catch (ex) {
+    return backup
   }
 }

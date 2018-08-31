@@ -10,7 +10,10 @@ export const resolvers = {
       'answerActions',
       'parentInteractionId',
       'question',
-      'isDeleted'
+      'isDeleted',
+      'source',
+      'externalQuestion',
+      'externalResponse'
     ], InteractionStep),
     questionText: async(interactionStep) => {
       const interaction = await r.table('interaction_step')

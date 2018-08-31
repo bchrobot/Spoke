@@ -68,6 +68,9 @@ const rootSchema = `
     answerActions: String
     parentInteractionId: String
     isDeleted: Boolean
+    source: String
+    externalQuestion: String
+    externalResponse: String
     interactionSteps: [InteractionStepInput]
   }
 
@@ -186,6 +189,7 @@ const rootSchema = `
     editUser(organizationId: String!, userId: Int!, userData:UserInput): User
     updateTextingHours( organizationId: String!, textingHoursStart: Int!, textingHoursEnd: Int!): Organization
     updateTextingHoursEnforcement( organizationId: String!, textingHoursEnforced: Boolean!): Organization
+    updateOrganizationFeatures( organizationId: String!, osdiEnabled: Boolean, osdiApiUrl: String, osdiApiToken: String ) : Organization
     bulkSendMessages(assignmentId: Int!): [CampaignContact]
     sendMessage(message:MessageInput!, campaignContactId:String!): CampaignContact,
     createOptOut(optOut:OptOutInput!, campaignContactId:String!):CampaignContact,
