@@ -27,12 +27,13 @@ class Login extends React.Component {
             <li><a href="https://docs.google.com/document/d/120NEPXpGvPSxjxVQdOdN1kwzXc0JlJNbEaBd0otUeu8/edit" target="_blank">Review the How-To Guide Here</a></li>
             <li>
               Join our texting group chat to ask questions and request new assignments
-              <ol>
+              <ol type="a">
                 <li>Download WhatsApp for Mobile and Desktop and make an account</li>
                 <li>Texting Support and Questions: <a href="http://bit.ly/ZephyrQandA" target="_blank">http://bit.ly/ZephyrQandA</a></li>
                 <li>Texting Assignments: <a href="http://bit.ly/ZephyrAsk4Txts" target="_blank">http://bit.ly/ZephyrAsk4Txts</a></li>
               </ol>
             </li>
+            <li><a href="https://zephyrforny.youcanbook.me/" target="_blank">Sign up for a shift</a></li>
           </ol>
           <b style={{textAlign: 'center'}}>Feel free to text Adin at (802) 595 0286 with any pressing questions.</b>
         </div>
