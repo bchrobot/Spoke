@@ -75,6 +75,7 @@ export default function renderIndex(html, css, assetMap, store) {
       window.TERMS_REQUIRE="${process.env.TERMS_REQUIRE || ''}"
       window.TZ="${process.env.TZ || ''}"
       window.DST_REFERENCE_TIMEZONE="${process.env.DST_REFERENCE_TIMEZONE || 'America/New_York'}"
+      window.LIVECHAT_LICENSE="${process.env.LIVECHAT_LICENSE || ''}"
     </script>
     <script src="${assetMap['bundle.js']}"></script>
   </body>

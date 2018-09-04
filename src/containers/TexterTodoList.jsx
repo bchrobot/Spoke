@@ -6,6 +6,7 @@ import AssignmentSummary from '../components/AssignmentSummary'
 import loadData from './hoc/load-data'
 import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
+import LiveChat from 'react-livechat'
 
 class TexterTodoList extends React.Component {
   renderTodoList(assignments) {
@@ -61,11 +62,21 @@ class TexterTodoList extends React.Component {
       />
     )
 
+    const user = this.props.data.currentUser
+    const visitor = {
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email
+    }
+
     return (
       <div>
         {renderedTodos.length === 0 ?
           empty : renderedTodos
         }
+        <LiveChat
+          license={window.LIVECHAT_LICENSE}
+          visitor={visitor}
+        />
       </div>
     )
   }
@@ -83,6 +94,9 @@ const mapQueriesToProps = ({ ownProps }) => ({
       currentUser {
         id
         terms
+        firstName
+        lastName
+        email
         todos(organizationId: $organizationId) {
           id
           campaign {
