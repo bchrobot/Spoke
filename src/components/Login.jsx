@@ -30,7 +30,7 @@ class Login extends React.Component {
               <ol type="a">
                 <li>Download WhatsApp for Mobile and Desktop and make an account</li>
                 <li>Texting Support and Questions: <a href="http://bit.ly/ZephyrQandA" target="_blank">http://bit.ly/ZephyrQandA</a></li>
-                <li>Texting Assignments: <a href="http://bit.ly/ZephyrAsk4Txts" target="_blank">http://bit.ly/ZephyrAsk4Txts</a></li>
+                <li>Texting Assignments: <a href="http://bit.ly/ZephyrAsk4Txts2" target="_blank">http://bit.ly/ZephyrAsk4Txts2</a></li>
               </ol>
             </li>
             <li><a href="https://zephyrforny.youcanbook.me/" target="_blank">Sign up for a shift</a></li>
