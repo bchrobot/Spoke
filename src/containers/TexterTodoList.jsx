@@ -57,7 +57,7 @@ class TexterTodoList extends React.Component {
     const empty = (
       <Empty
         title='You have nothing to do!'
-        content='Don’t forget to raise your hand on the WhatsApp group.'
+        content={<p>Don’t forget to raise your hand on the <a href='http://bit.ly/ZephyrAsk4Txts2' target='_blank'>WhatsApp group</a>.</p>}
         icon={<Check />}
       />
     )
