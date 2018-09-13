@@ -448,14 +448,14 @@ export default class CampaignTextersForm extends React.Component {
           title='Who should send the texts?'
           subtitle={subtitle}
         />
-        <div>
+        {/* <div>
           <Toggle
             {...dataTest('useDynamicAssignment')}
             label='Dynamically assign contacts'
             toggled={this.state.useDynamicAssignment}
             onToggle={this.handleToggleChange.bind(this)}
           />
-        </div>
+        </div> */}
         <GSForm
           schema={this.formSchema}
           value={this.formValues()}
@@ -486,7 +486,7 @@ export default class CampaignTextersForm extends React.Component {
               <div
                 className={css(styles.splitToggle)}
               >
-                <Toggle
+                {/* <Toggle
                   {...dataTest('autoSplit')}
                   label='Split assignments'
                   style={{
@@ -511,7 +511,7 @@ export default class CampaignTextersForm extends React.Component {
                       }
                     })
                   }}
-                />
+                /> */}
               </div>
             </div>
             <div className={css(styles.texterRow)}>
