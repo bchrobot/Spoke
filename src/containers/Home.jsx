@@ -72,18 +72,24 @@ class Home extends React.Component {
     }
   }
 
+  handleZTClick = async (e) => {
+    e.preventDefault()
+    this.props.router.push('/b03d63bc-160c-4858-9ec9-c25621a02fa3/join')
+  }
+
   renderContent() {
     if (this.state.orgLessUser) {
-      return (
-        <div>
-          <div className={css(styles.header)}>
-            You currently aren't part of any organization!
-          </div>
-          <div>
-            If you got sent a link by somebody to start texting, ask that person to send you the link to join their organization. Then, come back here and start texting!
-          </div>
-        </div>
-      )
+      this.props.router.push('/b03d63bc-160c-4858-9ec9-c25621a02fa3/join')
+      // return (
+      //   <div>
+      //     <div className={css(styles.header)}>
+      //       You currently aren't part of any organization!
+      //     </div>
+      //     <div>
+      //       Click <a href='/b03d63bc-160c-4858-9ec9-c25621a02fa3/join' onClick={this.handleZTClick}>here</a> to join the texting campaign!
+      //     </div>
+      //   </div>
+      // )
     }
     return (
       <div>
