@@ -3,7 +3,7 @@ import Auth0Strategy from 'passport-auth0'
 import AuthHasher from 'passport-local-authenticate'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { userLoggedIn } from './models/cacheable_queries'
-import { User } from './models'
+import { User, Organization } from './models'
 import wrap from './wrap'
 
 export function setupAuth0Passport() {
@@ -58,6 +58,15 @@ export function setupAuth0Passport() {
         is_superadmin: false
       }
       await User.save(userData)
+
+      // If a default organization UUID is specified, redirect the user to that join link
+      const defaultOrgUuid = process.env.DEFAULT_ORGANIZATION_UUID
+      if (defaultOrgUuid) {
+          const joinUrl = `${process.env.BASE_URL}/${defaultOrgUuid}/join`
+          res.redirect(joinUrl)
+          return
+      }
+
       res.redirect(req.query.state || 'terms')
       return
     }

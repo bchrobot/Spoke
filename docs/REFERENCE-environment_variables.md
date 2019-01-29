@@ -23,6 +23,7 @@ DB_USE_SSL                        | Boolean value to determine whether database 
 PGSSLMODE                         | Postgres SSL mode. Due to a [Knex bug](https://github.com/tgriesser/knex/issues/852), this environment variable must be used in order to specify the SSL mode directly in the driver. This must be set to `PGSSLMODE=require` to work with Heroku databases above the free tier (see [Heroku Postgres & SSL](https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl)).
 DEBUG_SCALING                     | Emit console.log on events related to scaling issues. _Default_: false.
 DEFAULT_SERVICE                   | Default SMS service. _Options_: twilio, nexmo, fakeservice.
+DEFAULT_ORGANIZATION_UUID         | UUID of organization (found in invite link) to add new users to by default. _Optional_.
 DEV_APP_PORT                      | Port for development Webpack server. Required for development.
 DST_REFERENCE_TIMEZONE            | Timezone to use to determine whether DST is in effect. If it's DST in this timezone, we assume it's DST everywhere.  _Default_: "America/New_York". (The default will work for any campaign in the US. For example, if the campaign is in Australia, use "Australia/Sydney" or some other timezone in Australia.  Note that DST is opposite in the northern and souther hemispheres.)
 EMAIL_FROM                        | Email from address. _Required to send email from either Mailgun **or** a custom SMTP server_.
