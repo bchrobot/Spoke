@@ -3,7 +3,7 @@ import Auth0Strategy from 'passport-auth0'
 import AuthHasher from 'passport-local-authenticate'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { userLoggedIn } from './models/cacheable_queries'
-import { User, Organization } from './models'
+import { User, r } from './models'
 import wrap from './wrap'
 
 export function setupAuth0Passport() {
@@ -39,6 +39,10 @@ export function setupAuth0Passport() {
     }
     const existingUser = await User.filter({ auth0_id: auth0Id })
 
+    // If a default organization UUID is specified, redirect the user to that join link
+    const defaultOrgUuid = process.env.DEFAULT_ORGANIZATION_UUID
+    const joinUrl = defaultOrgUuid ? `${process.env.BASE_URL}/${defaultOrgUuid}/join` : null
+
     if (existingUser.length === 0) {
       const userMetadata = (
         // eslint-disable-next-line no-underscore-dangle
@@ -59,18 +63,22 @@ export function setupAuth0Passport() {
       }
       await User.save(userData)
 
-      // If a default organization UUID is specified, redirect the user to that join link
-      const defaultOrgUuid = process.env.DEFAULT_ORGANIZATION_UUID
-      if (defaultOrgUuid) {
-          const joinUrl = `${process.env.BASE_URL}/${defaultOrgUuid}/join`
-          res.redirect(joinUrl)
-          return
-      }
-
-      res.redirect(req.query.state || 'terms')
+      // Add new user to default org if one is set and no special redirect exists in `state`
+      const destination = (req.query.state === '/' && joinUrl)
+        ? joinUrl
+        : req.query.state || 'terms'
+      res.redirect(destination)
       return
     }
-    res.redirect(req.query.state || '/')
+
+    // Add existing user to default org if they are not already part of one
+    const user_id = existingUser[0].id
+    const userOrgCount = await r.getCount(r.knex('user_organization').where({ user_id }))
+    const isMissingOrg = userOrgCount === 0
+    const destination = (req.query.state === '/' && joinUrl && isMissingOrg)
+      ? joinUrl
+      : req.query.state || '/'
+    res.redirect(destination)
     return
   })]
 }
